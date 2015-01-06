@@ -1,0 +1,52 @@
+Acme\MainBundle\Entity\Subscriptions:
+    type: entity
+    table: subscriptions
+    indexes:
+        SECONDARY:
+            columns:
+                - user_id
+        email:
+            columns:
+                - email
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        email:
+            type: string
+            nullable: true
+            length: 70
+            fixed: false
+            comment: ''
+        isActive:
+            type: boolean
+            nullable: true
+            comment: ''
+            column: is_active
+        createdAt:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: updated_at
+    manyToOne:
+        user:
+            targetEntity: Users
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

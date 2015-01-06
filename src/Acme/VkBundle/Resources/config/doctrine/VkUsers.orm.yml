@@ -1,0 +1,58 @@
+Acme\VkBundle\Entity\VkUsers:
+    type: entity
+    table: vk_users
+    indexes:
+        email:
+            columns:
+                - email
+    uniqueConstraints:
+        SECONDARY:
+            columns:
+                - user_id
+    id:
+        vkId:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            column: vk_id
+    fields:
+        email:
+            type: string
+            nullable: true
+            length: 70
+            fixed: false
+            comment: ''
+        token:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+            comment: ''
+        tokenExpiresAt:
+            type: datetime
+            nullable: false
+            comment: ''
+            column: token_expires_at
+        createdAt:
+            type: datetime
+            nullable: false
+            comment: ''
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: false
+            comment: ''
+            column: updated_at
+    manyToOne:
+        user:
+            targetEntity: Acme\MainBundle\Entity\Users
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

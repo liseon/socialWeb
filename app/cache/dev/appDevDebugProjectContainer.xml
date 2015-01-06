@@ -17,6 +17,8 @@
       <parameter key="DoctrineBundle">Doctrine\Bundle\DoctrineBundle\DoctrineBundle</parameter>
       <parameter key="SensioFrameworkExtraBundle">Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle</parameter>
       <parameter key="AppBundle">AppBundle\AppBundle</parameter>
+      <parameter key="AcmeMainBundle">Acme\MainBundle\AcmeMainBundle</parameter>
+      <parameter key="AcmeVkBundle">Acme\VkBundle\AcmeVkBundle</parameter>
       <parameter key="DebugBundle">Symfony\Bundle\DebugBundle\DebugBundle</parameter>
       <parameter key="AcmeDemoBundle">Acme\DemoBundle\AcmeDemoBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
@@ -27,10 +29,10 @@
     <parameter key="kernel.container_class">appDevDebugProjectContainer</parameter>
     <parameter key="database_driver">pdo_mysql</parameter>
     <parameter key="database_host">127.0.0.1</parameter>
-    <parameter key="database_port">null</parameter>
-    <parameter key="database_name">symfony</parameter>
-    <parameter key="database_user">root</parameter>
-    <parameter key="database_password">null</parameter>
+    <parameter key="database_port">3306</parameter>
+    <parameter key="database_name">social_market</parameter>
+    <parameter key="database_user">social</parameter>
+    <parameter key="database_password">f2Qa0G3olsw</parameter>
     <parameter key="mailer_transport">smtp</parameter>
     <parameter key="mailer_host">127.0.0.1</parameter>
     <parameter key="mailer_user">null</parameter>
@@ -2322,7 +2324,7 @@
     </service>
     <service id="monolog.handler.main" class="Monolog\Handler\StreamHandler">
       <argument>/home/lion/PhpstormProjects/socialWeb/app/logs/dev.log</argument>
-      <argument>100</argument>
+      <argument>400</argument>
       <argument>true</argument>
     </service>
     <service id="monolog.handler.console" class="Symfony\Bridge\Monolog\Handler\ConsoleHandler">
@@ -2456,10 +2458,10 @@
       <argument type="collection">
         <argument key="driver">pdo_mysql</argument>
         <argument key="host">127.0.0.1</argument>
-        <argument key="port">null</argument>
-        <argument key="dbname">symfony</argument>
-        <argument key="user">root</argument>
-        <argument key="password">null</argument>
+        <argument key="port">3306</argument>
+        <argument key="dbname">social_market</argument>
+        <argument key="user">social</argument>
+        <argument key="password">f2Qa0G3olsw</argument>
         <argument key="charset">UTF8</argument>
         <argument key="driverOptions" type="collection"/>
       </argument>
@@ -2490,7 +2492,9 @@
           <argument type="service" id="service_container"/>
         </service>
       </argument>
-      <argument type="collection"/>
+      <argument type="collection">
+        <argument key="enum">string</argument>
+      </argument>
     </service>
     <service id="form.type_guesser.doctrine" class="Symfony\Bridge\Doctrine\Form\DoctrineOrmTypeGuesser">
       <tag name="form.type_guesser"/>
@@ -2533,7 +2537,10 @@
       <argument type="service">
         <service class="Doctrine\ORM\Configuration" public="false">
           <call method="setEntityNamespaces">
-            <argument type="collection"/>
+            <argument type="collection">
+              <argument key="AcmeMainBundle">Acme\MainBundle\Entity</argument>
+              <argument key="AcmeVkBundle">Acme\VkBundle\Entity</argument>
+            </argument>
           </call>
           <call method="setMetadataCacheImpl">
             <argument type="service" id="doctrine_cache.providers.doctrine.orm.default_metadata_cache"/>
@@ -2546,7 +2553,36 @@
           </call>
           <call method="setMetadataDriverImpl">
             <argument type="service">
-              <service class="Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain" public="false"/>
+              <service class="Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain" public="false">
+                <call method="addDriver">
+                  <argument type="service">
+                    <service class="Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver" public="false">
+                      <argument type="collection">
+                        <argument key="/home/lion/PhpstormProjects/socialWeb/src/Acme/MainBundle/Resources/config/doctrine">Acme\MainBundle\Entity</argument>
+                        <argument key="/home/lion/PhpstormProjects/socialWeb/src/Acme/VkBundle/Resources/config/doctrine">Acme\VkBundle\Entity</argument>
+                      </argument>
+                      <call method="setGlobalBasename">
+                        <argument>mapping</argument>
+                      </call>
+                    </service>
+                  </argument>
+                  <argument>Acme\MainBundle\Entity</argument>
+                </call>
+                <call method="addDriver">
+                  <argument type="service">
+                    <service class="Doctrine\ORM\Mapping\Driver\SimplifiedYamlDriver" public="false">
+                      <argument type="collection">
+                        <argument key="/home/lion/PhpstormProjects/socialWeb/src/Acme/MainBundle/Resources/config/doctrine">Acme\MainBundle\Entity</argument>
+                        <argument key="/home/lion/PhpstormProjects/socialWeb/src/Acme/VkBundle/Resources/config/doctrine">Acme\VkBundle\Entity</argument>
+                      </argument>
+                      <call method="setGlobalBasename">
+                        <argument>mapping</argument>
+                      </call>
+                    </service>
+                  </argument>
+                  <argument>Acme\VkBundle\Entity</argument>
+                </call>
+              </service>
             </argument>
           </call>
           <call method="setProxyDir">
@@ -2991,6 +3027,14 @@
       <call method="addPath">
         <argument>/home/lion/PhpstormProjects/socialWeb/vendor/doctrine/doctrine-bundle/Resources/views</argument>
         <argument>Doctrine</argument>
+      </call>
+      <call method="addPath">
+        <argument>/home/lion/PhpstormProjects/socialWeb/src/Acme/MainBundle/Resources/views</argument>
+        <argument>AcmeMain</argument>
+      </call>
+      <call method="addPath">
+        <argument>/home/lion/PhpstormProjects/socialWeb/src/Acme/VkBundle/Resources/views</argument>
+        <argument>AcmeVk</argument>
       </call>
       <call method="addPath">
         <argument>/home/lion/PhpstormProjects/socialWeb/vendor/symfony/symfony/src/Symfony/Bundle/DebugBundle/Resources/views</argument>

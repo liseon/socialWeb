@@ -1,0 +1,46 @@
+Acme\MainBundle\Entity\Users:
+    type: entity
+    table: users
+    indexes:
+        SECONDARY:
+            columns:
+                - email
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        email:
+            type: string
+            nullable: true
+            length: 70
+            fixed: false
+            comment: ''
+        isDeleted:
+            type: boolean
+            nullable: false
+            comment: ''
+            column: is_deleted
+        isCopy:
+            type: boolean
+            nullable: false
+            comment: ''
+            column: is_copy
+        createdAt:
+            type: datetime
+            nullable: false
+            comment: ''
+            default: '0000-00-00 00:00:00'
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: false
+            comment: ''
+            default: CURRENT_TIMESTAMP
+            column: updated_at
+    lifecycleCallbacks: {  }

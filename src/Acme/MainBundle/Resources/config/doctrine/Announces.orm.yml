@@ -1,0 +1,89 @@
+Acme\MainBundle\Entity\Announces:
+    type: entity
+    table: Announces
+    indexes:
+        SECONDARY:
+            columns:
+                - for_user_id
+        moderator:
+            columns:
+                - moderator_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        sourceType:
+            type: string
+            nullable: false
+            length: null
+            fixed: false
+            comment: ''
+            column: source_type
+        ownerId:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            column: owner_id
+        friendId:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            column: friend_id
+        text:
+            type: text
+            nullable: false
+            length: null
+            fixed: false
+            comment: ''
+        points:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+        moderation:
+            type: boolean
+            nullable: false
+            comment: ''
+        moderationUpdated:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: moderation_updated
+        createdAt:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            comment: ''
+            column: updated_at
+    manyToOne:
+        forUser:
+            targetEntity: Users
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                for_user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        moderator:
+            targetEntity: Moderators
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                moderator_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

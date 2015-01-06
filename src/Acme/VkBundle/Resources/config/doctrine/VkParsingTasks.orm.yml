@@ -1,0 +1,40 @@
+Acme\VkBundle\Entity\VkParsingTasks:
+    type: entity
+    table: vk_parsing_tasks
+    indexes:
+        SECONDARY:
+            columns:
+                - vk_user_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: ''
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        level:
+            type: boolean
+            nullable: true
+            comment: ''
+            default: '1'
+        createdAt:
+            type: string
+            nullable: true
+            length: 45
+            fixed: false
+            comment: ''
+            column: created_at
+    manyToOne:
+        vkUser:
+            targetEntity: VkUsers
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                vk_user_id:
+                    referencedColumnName: vk_id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

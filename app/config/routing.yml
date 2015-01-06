@@ -1,3 +1,11 @@
+acme_vk:
+    resource: @AcmeVkBundle/Controller/
+    type:     annotation
+
+acme_main:
+    resource: @AcmeMainBundle/Controller/
+    type:     annotation
+
 app:
     resource: @AppBundle/Controller/
     type:     annotation
