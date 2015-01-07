@@ -2,6 +2,7 @@
 
 namespace Acme\MainBundle\Lib;
 
+use Acme\VkBundle\Entity\VkUsers;
 use AppBundle\Lib\CookiesHelper;
 use AppBundle\Lib\SessionHelper;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -78,8 +79,8 @@ class Auth extends Singleton
         SessionHelper::remove('vk_user_id');
         SessionHelper::remove('user_id');
 
-        //CookiesHelper::setCookie(self::COOKIE_PARAM, 0, -1);
-        //CookiesHelper::setCookie(self::COOKIE_RE, 0, -1);
+        CookiesHelper::setCookie(self::COOKIE_PARAM, 0, -1);
+        CookiesHelper::setCookie(self::COOKIE_RE, 0, -1);
     }
 
     /**
@@ -125,7 +126,7 @@ class Auth extends Singleton
         //only vk supported
         if ($params['type'] == self::TYPE_VK) {
             $repository = $this->doctrine->getRepository('AcmeVkBundle:VkUsers');
-            $vkUser = $repository->findOneBy(["user_id" => $params['user_id']]);
+            $vkUser = $repository->findOneBy(["user" => $params['user_id']]);
             /** @var \Acme\VkBundle\Entity\VkUsers $vkUser */
             if ($vkUser && $vkUser->getToken() == $params['token']) {
                 $this->type = self::TYPE_VK;

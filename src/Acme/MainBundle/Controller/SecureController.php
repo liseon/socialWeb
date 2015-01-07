@@ -22,7 +22,10 @@ class SecureController extends Controller
      * @Route("/", name = "secure.index")
      */
     public function indexAction(Request $request) {
-        $this->check($request);
+        $check = $this->check($request);
+        if ($check !== true) {
+            return $check;
+        }
 
         return $this->render('secure/index.html.twig');
     }
@@ -33,7 +36,7 @@ class SecureController extends Controller
     public function logoutAction(Request $request) {
         Auth::logout();
 
-        return CookiesHelper::saveAll($this->redirectToRoute("landingpage"));
+        return CookiesHelper::saveAll($this->redirectToRoute("secure.index"));
     }
 
     private function check(Request $request) {
@@ -44,12 +47,12 @@ class SecureController extends Controller
         if ($type = $request->cookies->get(Auth::COOKIE_RE)) {
             switch ($type) {
                 case Auth::TYPE_VK:
-                    $this->redirect(VkApi::getAuthUrl());
+                    return $this->redirect(VkApi::getAuthUrl());
                     break;
             }
         }
 
-        $this->redirectToRoute("landingpage");
+        return $this->redirectToRoute("landingpage");
     }
 
 
