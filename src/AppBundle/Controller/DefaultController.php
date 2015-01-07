@@ -37,7 +37,7 @@ class DefaultController extends Controller
         // use a default value if the attribute doesn't exist
         $foo = $session->get('foo', 'default_value');
 
-        //return new Response("Hello");
+        //return (new Response("Hello"))->headers->setCookie();
         //return $this->render('default/index.html.twig');
     }
 

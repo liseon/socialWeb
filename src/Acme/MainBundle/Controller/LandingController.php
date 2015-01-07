@@ -2,6 +2,7 @@
 
 namespace Acme\MainBundle\Controller;
 
+use Acme\MainBundle\Lib\Auth;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,10 @@ class LandingController extends Controller
      */
     public function indexAction(Request $request)
     {
+        if (Auth::check($this->getDoctrine())) {
+            return $this->redirectToRoute("secure.index");
+        }
+
         varlog("hello!");
 
         return $this->render('landing/index.html.twig', [
