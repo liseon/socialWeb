@@ -24,28 +24,28 @@ class Subscriptions
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=70, nullable=true)
+     * @ORM\Column(name="email", type="string", length=70, nullable=false)
      */
     private $email;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_active", type="boolean", nullable=true)
+     * @ORM\Column(name="is_active", type="boolean", nullable=false)
      */
     private $isActive;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime", nullable=true)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
     private $updatedAt;
 

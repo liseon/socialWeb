@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Announces
  *
- * @ORM\Table(name="Announces", indexes={@ORM\Index(name="SECONDARY", columns={"for_user_id"}), @ORM\Index(name="moderator", columns={"moderator_id"})})
+ * @ORM\Table(name="Announces", indexes={@ORM\Index(name="SECONDARY", columns={"for_user_id"}), @ORM\Index(name="moderator", columns={"moderator_id"}), @ORM\Index(name="owner", columns={"owner_id"})})
  * @ORM\Entity
  */
 class Announces
@@ -38,6 +38,13 @@ class Announces
     /**
      * @var integer
      *
+     * @ORM\Column(name="post_id", type="integer", nullable=false)
+     */
+    private $postId;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="friend_id", type="integer", nullable=false)
      */
     private $friendId;
@@ -45,7 +52,7 @@ class Announces
     /**
      * @var string
      *
-     * @ORM\Column(name="text", type="text", nullable=false)
+     * @ORM\Column(name="text", type="text", length=65535, nullable=false)
      */
     private $text;
 
@@ -66,21 +73,21 @@ class Announces
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="moderation_updated", type="datetime", nullable=true)
+     * @ORM\Column(name="moderation_updated", type="datetime", nullable=false)
      */
     private $moderationUpdated;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_at", type="datetime", nullable=true)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     private $createdAt;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
     private $updatedAt;
 
@@ -160,6 +167,29 @@ class Announces
     public function getOwnerId()
     {
         return $this->ownerId;
+    }
+
+    /**
+     * Set postId
+     *
+     * @param integer $postId
+     * @return Announces
+     */
+    public function setPostId($postId)
+    {
+        $this->postId = $postId;
+
+        return $this;
+    }
+
+    /**
+     * Get postId
+     *
+     * @return integer 
+     */
+    public function getPostId()
+    {
+        return $this->postId;
     }
 
     /**

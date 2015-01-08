@@ -1,16 +1,16 @@
-Acme\MainBundle\Entity\Announces:
+Acme\VkBundle\Entity\VkAttachments:
     type: entity
-    table: Announces
+    table: vk_attachments
     indexes:
         SECONDARY:
             columns:
-                - for_user_id
+                - announce_id
         moderator:
             columns:
                 - moderator_id
-        owner:
+        fk_attachments_3_idx:
             columns:
-                - owner_id
+                - vk_id
     id:
         id:
             type: integer
@@ -20,38 +20,21 @@ Acme\MainBundle\Entity\Announces:
             generator:
                 strategy: IDENTITY
     fields:
-        sourceType:
+        vkOwner:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: vk_owner
+        type:
             type: string
             nullable: false
             length: null
             fixed: false
-            column: source_type
-        ownerId:
-            type: integer
+        url:
+            type: string
             nullable: false
-            unsigned: false
-            column: owner_id
-        postId:
-            type: integer
-            nullable: false
-            unsigned: false
-            default: '0'
-            column: post_id
-        friendId:
-            type: integer
-            nullable: false
-            unsigned: false
-            column: friend_id
-        text:
-            type: text
-            nullable: false
-            length: 65535
+            length: 255
             fixed: false
-        points:
-            type: integer
-            nullable: false
-            unsigned: false
-            default: '0'
         moderation:
             type: boolean
             nullable: false
@@ -72,13 +55,13 @@ Acme\MainBundle\Entity\Announces:
             default: CURRENT_TIMESTAMP
             column: updated_at
     manyToOne:
-        forUser:
-            targetEntity: Users
+        announce:
+            targetEntity: Announces
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                for_user_id:
+                announce_id:
                     referencedColumnName: id
             orphanRemoval: false
         moderator:
@@ -89,5 +72,14 @@ Acme\MainBundle\Entity\Announces:
             joinColumns:
                 moderator_id:
                     referencedColumnName: id
+            orphanRemoval: false
+        vk:
+            targetEntity: VkUsers
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                vk_id:
+                    referencedColumnName: vk_id
             orphanRemoval: false
     lifecycleCallbacks: {  }

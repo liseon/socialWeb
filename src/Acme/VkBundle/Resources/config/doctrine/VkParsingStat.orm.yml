@@ -1,10 +1,10 @@
-Acme\MainBundle\Entity\Moderators:
+Acme\VkBundle\Entity\VkParsingStat:
     type: entity
-    table: moderators
+    table: vk_parsing_stat
     indexes:
-        email:
+        type:
             columns:
-                - email
+                - agr_type
     id:
         id:
             type: integer
@@ -14,17 +14,20 @@ Acme\MainBundle\Entity\Moderators:
             generator:
                 strategy: IDENTITY
     fields:
-        email:
+        agrType:
             type: string
             nullable: false
-            length: 70
+            length: null
             fixed: false
-        pass:
-            type: string
+            column: agr_type
+        level:
+            type: boolean
             nullable: false
-            length: 45
-            fixed: false
-        rules:
+        count:
+            type: integer
+            nullable: false
+            unsigned: false
+        waiting:
             type: integer
             nullable: false
             unsigned: false

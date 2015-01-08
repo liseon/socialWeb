@@ -88,7 +88,6 @@ class VkUsers
         return $this->vkId;
     }
 
-
     /**
      * Set email
      *
@@ -220,7 +219,7 @@ class VkUsers
     /**
      * Get user
      *
-     * @return \Acme\MainBundle\Entity\Users 
+     * @return \Acme\MainBundle\Entity\Users
      */
     public function getUser()
     {

@@ -20,7 +20,7 @@ class AuthListener
     private $reader;
 
     public function __construct(Reader $reader) {
-        $this->reader = $reader;  //Получаем читалку аннотаций
+        $this->reader = $reader;
     }
 
     /**

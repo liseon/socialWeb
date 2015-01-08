@@ -14,40 +14,39 @@ Acme\VkBundle\Entity\VkUsers:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
             id: true
             column: vk_id
+            generator:
+                strategy: IDENTITY
     fields:
         email:
             type: string
             nullable: true
             length: 70
             fixed: false
-            comment: ''
         token:
             type: string
             nullable: true
             length: 100
             fixed: false
-            comment: ''
         tokenExpiresAt:
             type: datetime
             nullable: false
-            comment: ''
+            default: '0000-00-00 00:00:00'
             column: token_expires_at
         createdAt:
             type: datetime
             nullable: false
-            comment: ''
+            default: '0000-00-00 00:00:00'
             column: created_at
         updatedAt:
             type: datetime
             nullable: false
-            comment: ''
+            default: CURRENT_TIMESTAMP
             column: updated_at
     manyToOne:
         user:
-            targetEntity: Acme\MainBundle\Entity\Users
+            targetEntity: \Acme\MainBundle\Entity\Users
             cascade: {  }
             mappedBy: null
             inversedBy: null

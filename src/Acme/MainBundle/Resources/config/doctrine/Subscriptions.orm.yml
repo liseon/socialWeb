@@ -13,31 +13,29 @@ Acme\MainBundle\Entity\Subscriptions:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
             id: true
             generator:
                 strategy: IDENTITY
     fields:
         email:
             type: string
-            nullable: true
+            nullable: false
             length: 70
             fixed: false
-            comment: ''
         isActive:
             type: boolean
-            nullable: true
-            comment: ''
+            nullable: false
+            default: '1'
             column: is_active
         createdAt:
             type: datetime
-            nullable: true
-            comment: ''
+            nullable: false
+            default: '0000-00-00 00:00:00'
             column: created_at
         updatedAt:
             type: datetime
-            nullable: true
-            comment: ''
+            nullable: false
+            default: CURRENT_TIMESTAMP
             column: updated_at
     manyToOne:
         user:

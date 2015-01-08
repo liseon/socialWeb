@@ -5,28 +5,37 @@ Acme\VkBundle\Entity\VkParsingTasks:
         SECONDARY:
             columns:
                 - vk_user_id
+        isdone:
+            columns:
+                - is_done
     id:
         id:
             type: integer
             nullable: false
             unsigned: false
-            comment: ''
             id: true
             generator:
                 strategy: IDENTITY
     fields:
         level:
             type: boolean
-            nullable: true
-            comment: ''
-            default: '1'
+            nullable: false
+            default: '0'
         createdAt:
-            type: string
-            nullable: true
-            length: 45
-            fixed: false
-            comment: ''
+            type: datetime
+            nullable: false
+            default: CURRENT_TIMESTAMP
             column: created_at
+        updatedAt:
+            type: datetime
+            nullable: false
+            default: '0000-00-00 00:00:00'
+            column: updated_at
+        isDone:
+            type: boolean
+            nullable: false
+            default: '0'
+            column: is_done
     manyToOne:
         vkUser:
             targetEntity: VkUsers

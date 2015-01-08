@@ -1,0 +1,40 @@
+Acme\VkBundle\Entity\VkFriends:
+    type: entity
+    table: vk_friends
+    indexes:
+        friend:
+            columns:
+                - friend_id
+    id: {  }
+    fields:
+        createdAt:
+            type: datetime
+            nullable: false
+            default: '0000-00-00 00:00:00'
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: false
+            default: CURRENT_TIMESTAMP
+            column: updated_at
+    oneToOne:
+        id:
+            targetEntity: VkUsers
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                id:
+                    referencedColumnName: vk_id
+            orphanRemoval: false
+    manyToOne:
+        friend:
+            targetEntity: VkUsers
+            cascade: {  }
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                friend_id:
+                    referencedColumnName: vk_id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
