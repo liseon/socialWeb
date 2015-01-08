@@ -4,11 +4,13 @@ namespace Acme\VkBundle\Controller;
 
 use Acme\MainBundle\Lib\Auth;
 use AppBundle\Lib\CookiesHelper;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\Mapping as ORM;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Acme\VkBundle\Lib\VkApi;
 use Acme\VkBundle\Entity\VkUsers;
@@ -26,8 +28,7 @@ class DefaultController extends Controller
     /**
      * @Route("callback/", name = "vk.callback")
      */
-    public function callbackAction(Request $request)
-    {
+    public function callbackAction(Request $request) {
         $result = VkApi::getInstance()->getNewAccessToken($request->get(VkApi::PARAM_CODE));
         if (!is_array($result) || !isset($result['access_token'])) {
 
@@ -49,8 +50,20 @@ class DefaultController extends Controller
             $em->flush();
         }
         //авторизуем
-        Auth::setAuth($vkUser->getUser()->getId(), $result['user_id'], Auth::TYPE_VK, $result['access_token']);
+        return $this->forward("AcmeMainBundle:Secured:login", [
+            'user_id' => $vkUser->getUser()->getId(),
+            'vk_user_id' => $result['user_id'],
+            'type' => Auth::TYPE_VK,
+            'token' => $result['access_token'],
+        ]);
+    }
 
-        return CookiesHelper::saveAll($this->redirectToRoute('secure.index'));
+    /**
+     * @Template()
+     */
+    public function authLinkAction() {
+        return [
+            'vk_auth' => VkApi::getAuthUrl(),
+        ];
     }
 }

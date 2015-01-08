@@ -9,13 +9,11 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
-use AppBundle\Patterns\Singleton;
 
-
-class Auth extends Singleton
+class Auth
 {
     /** @var  bool */
-    private $isAuth = null;
+    private $isAuth;
 
     /** @var  int */
     private $userId;
@@ -36,44 +34,41 @@ class Auth extends Singleton
     const TYPE_VK = 'vk';
 
 
+    public function __construct(Registry $doctrine) {
+        $this->doctrine = $doctrine;
+        $this->isAuth = $this->init();
+    }
+
     /**
-     * @param Registry $doctrine
      * @return bool
      */
-    public static function check(Registry $doctrine ) {
-        $inst = self::getInstance();
-        if (is_null($inst->isAuth)) {
-            $inst->doctrine = $doctrine;
-            $inst->isAuth = $inst->init();
-        }
+    public function check() {
 
-        return $inst->isAuth;
+        return (bool)$this->isAuth;
     }
 
-    public static function getId() {
-        return self::getInstance()->userId;
+    public function getId() {
+        return $this->userId;
     }
 
-    public static function getVkId() {
-        return self::getInstance()->vkUserId;
+    public function getVkId() {
+        return $this->vkUserId;
     }
 
-    public static function setAuth($userId, $vkUserId, $type, $token) {
-        $inst = self::getInstance();
-        $inst->isAuth = true;
-        $inst->userId = $userId;
-        $inst->vkUserId = $vkUserId;
-        $inst->type = $type;
+    public function setAuth($userId, $vkUserId, $type, $token) {
+        $this->isAuth = true;
+        $this->userId = $userId;
+        $this->vkUserId = $vkUserId;
+        $this->type = $type;
 
-        $inst->saveToSession($token);
+        $this->saveToSession($token);
     }
 
-    public static function logout() {
-        $inst = self::getInstance();
-        $inst->isAuth = false;
-        $inst->userId = false;
-        $inst->vkUserId = false;
-        $inst->type = false;
+    public function logout() {
+        $this->isAuth = false;
+        $this->userId = false;
+        $this->vkUserId = false;
+        $this->type = false;
 
         SessionHelper::remove('type');
         SessionHelper::remove('vk_user_id');
@@ -127,7 +122,7 @@ class Auth extends Singleton
         if ($params['type'] == self::TYPE_VK) {
             $repository = $this->doctrine->getRepository('AcmeVkBundle:VkUsers');
             $vkUser = $repository->findOneBy(["user" => $params['user_id']]);
-            /** @var \Acme\VkBundle\Entity\VkUsers $vkUser */
+            /** @var VkUsers $vkUser */
             if ($vkUser && $vkUser->getToken() == $params['token']) {
                 $this->type = self::TYPE_VK;
                 $this->userId = $params['user_id'];

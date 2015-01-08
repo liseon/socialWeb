@@ -20,16 +20,13 @@ class LandingController extends Controller
      *
      * @return Response A Response instance
      */
-    public function indexAction(Request $request)
-    {
-        if (Auth::check($this->getDoctrine())) {
-            return $this->redirectToRoute("secure.index");
+    public function indexAction(Request $request) {
+        /** @var Auth $auth */
+        $auth = $this->container->get('acme_main.auth');
+        if ($auth->check()) {
+            return $this->redirectToRoute("secured.index");
         }
 
-        varlog("hello!");
-
-        return $this->render('landing/index.html.twig', [
-            'vk_auth' => VkApi::getAuthUrl(),
-        ]);
+        return $this->render('landing/index.html.twig');
     }
 }

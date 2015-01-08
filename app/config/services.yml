@@ -4,6 +4,14 @@ parameters:
 #    parameter_name: value
 
 services:
+    kernel.listener.response:
+        class: AppBundle\EventListener\ResponseListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+#    kernel.listener.controller:
+#        class: Acme\MainBundle\EventListener\AuthListener
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 #    service_name:
 #        class: Acme\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

@@ -2,3 +2,7 @@ services:
 #    acme_vk.example:
 #        class: Acme\VkBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+
+#    acme_vk.example:
+#          class: Acme\MainBundle\Lib\Example
+#          arguments: ["@doctrine"]
