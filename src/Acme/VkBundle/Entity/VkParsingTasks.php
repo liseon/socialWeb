@@ -47,7 +47,7 @@ class VkParsingTasks
      *
      * @ORM\Column(name="is_done", type="boolean", nullable=false)
      */
-    private $isDone;
+    private $isDone = false;
 
     /**
      * @var \Acme\VkBundle\Entity\VkUsers
@@ -184,5 +184,16 @@ class VkParsingTasks
     public function getVkUser()
     {
         return $this->vkUser;
+    }
+
+    /**
+     *  @ORM\PrePersist
+     */
+    public function doStuffOnPrePersist()
+    {
+        $this->setUpdatedAt(new \DateTime());
+        if (is_null($this->getCreatedAt())) {
+            $this->setCreatedAt(new \DateTime());
+        }
     }
 }

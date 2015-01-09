@@ -2,6 +2,7 @@
 
 namespace Acme\MainBundle\Lib;
 
+use Acme\MainBundle\Entity\Users;
 use Acme\VkBundle\Entity\VkUsers;
 use AppBundle\Lib\CookiesHelper;
 use AppBundle\Lib\SessionHelper;
@@ -12,14 +13,8 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 
 class Auth
 {
-    /** @var  bool */
-    private $isAuth;
-
-    /** @var  int */
-    private $userId;
-
-    /** @var  int */
-    private $vkUserId;
+    /** @var  VkUsers */
+    private $vkUser;
 
     /** @var  string */
     private $type;
@@ -36,7 +31,7 @@ class Auth
 
     public function __construct(Registry $doctrine) {
         $this->doctrine = $doctrine;
-        $this->isAuth = $this->init();
+        $this->init();
     }
 
     /**
@@ -44,35 +39,88 @@ class Auth
      */
     public function check() {
 
-        return (bool)$this->isAuth;
+        return $this->vkUser instanceof VkUsers;
     }
 
     public function getId() {
-        return $this->userId;
+        if (!$this->check()) {
+            return false;
+        }
+        return $this->vkUser->getUser()->getId();
     }
 
     public function getVkId() {
-        return $this->vkUserId;
+        if (!$this->check()) {
+            return false;
+        }
+        return $this->vkUser->getVkId();
     }
 
-    public function setAuth($userId, $vkUserId, $type, $token) {
-        $this->isAuth = true;
-        $this->userId = $userId;
-        $this->vkUserId = $vkUserId;
+    /**
+     * @return VkUsers|bool
+     */
+    public function getVkUser() {
+        if (!$this->check()) {
+            return false;
+        }
+        return $this->vkUser;
+    }
+
+    public function getVkEmail() {
+        if (!$this->check()) {
+            return false;
+        }
+        return $this->vkUser->getEmail();
+    }
+
+    public function getEmail() {
+        if (!$this->check()) {
+            return false;
+        }
+        return $this->vkUser->getUser()->getEmail();
+    }
+
+    /**
+     * @todo type пока не проверяется!
+     * Потом $this->vkUser станет типовым пользователем абстрактной социальной сети,
+     * а сама сеть будет передаваться в поле type
+     *
+     * @param $type
+     * @param $vkUserId
+     * @param $token
+     * @param $expiresIn
+     * @param null|string $email
+     */
+    public function setAuth($type, $vkUserId, $token, $expiresIn, $email = null) {
         $this->type = $type;
+
+        varlog(func_get_args());
+
+        $repository = $this->doctrine->getRepository('AcmeVkBundle:VkUsers');
+        /** @var VkUsers $vkUser */
+        $vkUser = $repository->find($vkUserId);
+        //Новый пользователь
+        if (!$vkUser) {
+            $mainUser = new Users();
+            $em = $this->doctrine->getManager();
+            $em->persist($mainUser);
+            $vkUser = new VkUsers();
+            $vkUser->setVkId($vkUserId)->setToken($token)->setUser($mainUser)->setEmail($email);
+            $vkUser->setTokenExpiresAt(new \DateTime(date_create(time() + $expiresIn)));
+            $em->persist($vkUser);
+            $em->flush();
+        }
+        $this->vkUser = $vkUser;
 
         $this->saveToSession($token);
     }
 
     public function logout() {
-        $this->isAuth = false;
-        $this->userId = false;
-        $this->vkUserId = false;
+        $this->vkUser = false;
         $this->type = false;
 
         SessionHelper::remove('type');
-        SessionHelper::remove('vk_user_id');
-        SessionHelper::remove('user_id');
+        SessionHelper::remove('vk_user');
 
         CookiesHelper::setCookie(self::COOKIE_PARAM, 0, -1);
         CookiesHelper::setCookie(self::COOKIE_RE, 0, -1);
@@ -87,7 +135,7 @@ class Auth
      */
     private function init() {
         //already
-        if ($this->isAuth) {
+        if ($this->check()) {
             return true;
         }
         //Сессия протухла, проверим в cookies
@@ -101,8 +149,7 @@ class Auth
 
             return false;
         }
-        $this->userId = SessionHelper::get('user_id');
-        $this->vkUserId = SessionHelper::get('vk_user_id');
+        $this->vkUser = SessionHelper::get('vk_user');
         $this->type = SessionHelper::get('type');
 
         return true;
@@ -111,9 +158,9 @@ class Auth
     private function reAuth($params) {
         if (
             !isset($params['type'])
-            || !isset($params['user_id'])
+            || !isset($params['vk_user_id'])
             || !isset($params['token'])
-            || !($params['user_id'] > 0)
+            || !($params['vk_user_id'] > 0)
         ) {
             return false;
         }
@@ -121,12 +168,11 @@ class Auth
         //only vk supported
         if ($params['type'] == self::TYPE_VK) {
             $repository = $this->doctrine->getRepository('AcmeVkBundle:VkUsers');
-            $vkUser = $repository->findOneBy(["user" => $params['user_id']]);
+            $vkUser = $repository->find($params['vk_user_id']);
             /** @var VkUsers $vkUser */
             if ($vkUser && $vkUser->getToken() == $params['token']) {
                 $this->type = self::TYPE_VK;
-                $this->userId = $params['user_id'];
-                $this->vkUserId = $vkUser->getVkId();
+                $this->vkUser = $vkUser;
 
                 $this->saveToSession($params['token']);
 
@@ -139,12 +185,11 @@ class Auth
 
     private function saveToSession($token) {
         SessionHelper::set('type', $this->type);
-        SessionHelper::set('vk_user_id', $this->vkUserId);
-        SessionHelper::set('user_id', $this->userId);
+        SessionHelper::set('vk_user', $this->vkUser);
 
         $cookie = [
             'type' => self::TYPE_VK,
-            'user_id' => $this->userId,
+            'vk_user_id' => $this->vkUser->getVkId(),
             'token' => $token,
         ];
 

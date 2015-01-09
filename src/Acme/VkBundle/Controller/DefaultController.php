@@ -3,18 +3,14 @@
 namespace Acme\VkBundle\Controller;
 
 use Acme\MainBundle\Lib\Auth;
-use AppBundle\Lib\CookiesHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Doctrine\ORM\Mapping as ORM;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Acme\VkBundle\Lib\VkApi;
-use Acme\VkBundle\Entity\VkUsers;
-use Acme\MainBundle\Entity\Users;
 
 
 /**
@@ -34,27 +30,14 @@ class DefaultController extends Controller
 
             return $this->redirectToRoute('landingpage', array('error' => 'wrong_result'));
         }
-        $repository = $this->getDoctrine()->getRepository('AcmeVkBundle:VkUsers');
-        /** @var VkUsers $vkUser */
-        $vkUser = $repository->find($result['user_id']);
-        //Новый пользователь
-        if (!$vkUser) {
-            $mainUser = new Users();
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($mainUser);
-            $vkUser = new VkUsers();
-            $vkUser->setVkId($result['user_id'])->setToken($result['access_token'])->setUser($mainUser);
-            $vkUser->setTokenExpiresAt(new \DateTime(date_create(time() + $result['expires_in'])));
-            isset($result['email']) && $vkUser->setEmail($result['email']);
-            $em->persist($vkUser);
-            $em->flush();
-        }
+
         //авторизуем
         return $this->forward("AcmeMainBundle:Secured:login", [
-            'user_id' => $vkUser->getUser()->getId(),
-            'vk_user_id' => $result['user_id'],
             'type' => Auth::TYPE_VK,
+            'vk_user_id' => $result['user_id'],
             'token' => $result['access_token'],
+            'expires_in' => $result['expires_in'],
+            'email' => isset($result['email']) ? $result['email'] : null,
         ]);
     }
 

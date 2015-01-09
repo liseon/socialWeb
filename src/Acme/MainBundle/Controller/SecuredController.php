@@ -2,7 +2,9 @@
 
 namespace Acme\MainBundle\Controller;
 
+use Acme\MainBundle\Entity\Users;
 use Acme\MainBundle\Lib\Auth;
+use Acme\VkBundle\Entity\VkParsingTasks;
 use Acme\VkBundle\Lib\VkApi;
 use Acme\MainBundle\Annotation\NeedAuth;
 
@@ -34,11 +36,33 @@ class SecuredController extends Controller
     }
 
     /**
-     * @Route("/logout", name = "secure.logout")
+     * @Route("/logout", name = "secured.logout")
      */
     public function logoutAction(Request $request) {
         /** @var Auth $auth */
         $auth = $this->container->get('acme_main.auth');
+        $auth->logout();
+
+        return $this->redirectToRoute("landingpage");
+    }
+
+    /**
+     *  @Route("/delete", name = "secured.delete")
+     *  @NeedAuth()
+     */
+    public function deleteAction(Request $request) {
+        /** @var Auth $auth */
+        $auth = $this->container->get('acme_main.auth');
+        $repository = $this->getDoctrine()->getRepository('AcmeMainBundle:Users');
+        $user = $repository->find($auth->getId());
+        $repository = $this->getDoctrine()->getRepository('AcmeVkBundle:VkUsers');
+        $vkUser = $repository->find($auth->getVkId());
+        if (!is_null($vkUser) && !is_null($user)) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($vkUser);
+            $em->remove($user);
+            $em->flush();
+        }
         $auth->logout();
 
         return $this->redirectToRoute("landingpage");
@@ -54,30 +78,25 @@ class SecuredController extends Controller
         /** @var Auth $auth */
         $auth = $this->container->get('acme_main.auth');
         $auth->setAuth(
-            $request->get('user_id'),
-            $request->get('vk_user_id'),
             $request->get('type'),
-            $request->get('token')
+            $request->get('vk_user_id'),
+            $request->get('token'),
+            $request->get('expires_in'),
+            $request->get('email')
         );
+
+        $task1 = new VkParsingTasks();
+        $task1->setVkUser($auth->getVkUser())->setLevel(0);
+        $task2 = new VkParsingTasks();
+        $task2->setVkUser($auth->getVkUser())->setLevel(1);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($task1);
+        $em->persist($task2);
+        $em->flush();
+
 
         return $this->redirectToRoute('secured.index');
     }
-
-   /* private function check(Request $request) {
-        if (Auth::check($this->getDoctrine())) {
-            return true;
-        }
-        //try Re
-        if ($type = $request->cookies->get(Auth::COOKIE_RE)) {
-            switch ($type) {
-                case Auth::TYPE_VK:
-                    return $this->redirect(VkApi::getAuthUrl());
-                    break;
-            }
-        }
-
-        return $this->redirectToRoute("landingpage");
-    }*/
 
 
 }

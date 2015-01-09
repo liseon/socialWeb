@@ -16,8 +16,6 @@ Acme\VkBundle\Entity\VkUsers:
             unsigned: false
             id: true
             column: vk_id
-            generator:
-                strategy: IDENTITY
     fields:
         email:
             type: string
