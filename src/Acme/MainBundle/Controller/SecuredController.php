@@ -2,15 +2,13 @@
 
 namespace Acme\MainBundle\Controller;
 
-use Acme\MainBundle\Entity\Users;
+use Acme\MainBundle\Entity\Subscriptions;
 use Acme\MainBundle\Lib\Auth;
 use Acme\VkBundle\Entity\VkParsingTasks;
-use Acme\VkBundle\Lib\VkApi;
 use Acme\MainBundle\Annotation\NeedAuth;
 
-use AppBundle\Lib\CookiesHelper;
-use AppBundle\Lib\SessionHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,13 +23,11 @@ class SecuredController extends Controller
     /**
      * @Route("/", name = "secured.index")
      * @NeedAuth()
+     * @Template()
      */
     public function indexAction(Request $request) {
-        /** @var Auth $auth */
-        $auth = $this->container->get('acme_main.auth');
-        varlog("Auth result:", $auth->check());
 
-//        return $this->render('AcmeMainBundle:Secured:');
+        return [];
         return $this->render('secure/index.html.twig');
     }
 
@@ -39,9 +35,7 @@ class SecuredController extends Controller
      * @Route("/logout", name = "secured.logout")
      */
     public function logoutAction(Request $request) {
-        /** @var Auth $auth */
-        $auth = $this->container->get('acme_main.auth');
-        $auth->logout();
+        $this->getAuth()->logout();
 
         return $this->redirectToRoute("landingpage");
     }
@@ -51,8 +45,7 @@ class SecuredController extends Controller
      *  @NeedAuth()
      */
     public function deleteAction(Request $request) {
-        /** @var Auth $auth */
-        $auth = $this->container->get('acme_main.auth');
+        $auth = $this->getAuth();
         $repository = $this->getDoctrine()->getRepository('AcmeMainBundle:Users');
         $user = $repository->find($auth->getId());
         $repository = $this->getDoctrine()->getRepository('AcmeVkBundle:VkUsers');
@@ -75,9 +68,7 @@ class SecuredController extends Controller
      * @return Response
      */
     public function loginAction(Request $request) {
-        /** @var Auth $auth */
-        $auth = $this->container->get('acme_main.auth');
-        $auth->setAuth(
+        $this->getAuth()->setAuth(
             $request->get('type'),
             $request->get('vk_user_id'),
             $request->get('token'),
@@ -85,17 +76,61 @@ class SecuredController extends Controller
             $request->get('email')
         );
 
-        $task1 = new VkParsingTasks();
-        $task1->setVkUser($auth->getVkUser())->setLevel(0);
-        $task2 = new VkParsingTasks();
-        $task2->setVkUser($auth->getVkUser())->setLevel(1);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($task1);
-        $em->persist($task2);
-        $em->flush();
+        return $this->redirectToRoute('secured.create_tasks');
+    }
 
 
-        return $this->redirectToRoute('secured.index');
+    /**
+     * @Route("/subscribe", name = "secured.subscribe")
+     * @Template()
+     * @NeedAuth()
+     */
+    public function subscriptionAction(Request $request) {
+        $auth = $this->getAuth();
+        $subscription = new Subscriptions();
+        $email = $auth->getVkEmail() ? : $auth->getEmail() ? : '';
+        $subscription->setEmail($email);
+        $form = $this->createFormBuilder($subscription)
+            ->add('email', 'email')
+            ->add('subscr', 'submit', ['label' => 'Прислать уведомление'])
+            ->add('not_subscr', 'submit', ['label' => 'Не уведомлять'])
+            ->getForm();
+
+        return ['form' => $form->createView()];
+    }
+
+    /**
+     * @Route("/create_tasks", name = "secured.create_tasks")
+     * @NeedAuth()
+     */
+    public function actionCreateTasks(Request $request) {
+        $auth = $this->getAuth();
+
+        $repository = $this->getDoctrine()->getRepository("AcmeVkBundle:VkParsingTasks");
+        if (!$repository->findOneByVkUser($auth->getVkUser())) {
+            $task1 = new VkParsingTasks();
+            $task1->setVkUser($auth->getVkUser())->setLevel(0);
+            $task2 = new VkParsingTasks();
+            $task2->setVkUser($auth->getVkUser())->setLevel(1);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($task1);
+            $em->persist($task2);
+            $em->flush();
+        }
+
+        $repository = $this->getDoctrine()->getRepository("AcmeMainBundle:Subscriptions");
+        if ($repository->findOneByUser($auth->getId())) {
+            return $this->redirectToRoute('secured.index');
+        }
+
+        return $this->redirectToRoute('secured.subscribe');
+    }
+
+    /**
+     * @return Auth
+     */
+    private function getAuth() {
+        return $this->container->get('acme_main.auth');
     }
 
 

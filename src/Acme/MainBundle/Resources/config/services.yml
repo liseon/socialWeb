@@ -1,7 +1,7 @@
 services:
     acme_main.auth:
             class: Acme\MainBundle\Lib\Auth
-            arguments: ["@doctrine"]
+            arguments: ["@doctrine", "@session"]
 
     kernel.listener.controller:
         class: Acme\MainBundle\EventListener\AuthListener

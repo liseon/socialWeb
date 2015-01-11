@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Secure zone!{% endblock %}
+
+{% block navigation %}
+    <a href="{{ path('secured.logout') }}">Logout!</a>
+    <br>
+    <a href="{{ path('secured.delete') }}">Delete me!</a>
+{% endblock %}

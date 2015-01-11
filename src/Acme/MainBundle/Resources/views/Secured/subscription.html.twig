@@ -1,0 +1,15 @@
+{% extends 'AcmeMainBundle:Secured:base.html.twig' %}
+
+{% block body %}
+    Парсинг 1-ого круга друзей займет около 1-ой минуты.
+    <br>
+    Парсинг 2-ого круга может занять продолжительное время.
+    <br>
+    Введите свой email, чтобы мы смогли Вас уведомить, когда результаты парсинга будут подготовлены.
+    <br>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+    <br>
+    <a href="{{ path('secured.index') }}">Не уведомлять меня!</a>
+{% endblock %}

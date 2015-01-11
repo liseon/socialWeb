@@ -44,7 +44,7 @@ class AppKernel extends Kernel
 function varlog() {
     $args = func_get_args();
     foreach ($args as $arg) {
-        $mess = var_export($arg, true);
+        $mess = is_object($arg) ? get_class($arg) : var_export($arg, true);
         if ('cli' === php_sapi_name()) {
             echo "{$mess} \n";
         } else {

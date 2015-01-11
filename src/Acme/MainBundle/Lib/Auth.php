@@ -5,7 +5,6 @@ namespace Acme\MainBundle\Lib;
 use Acme\MainBundle\Entity\Users;
 use Acme\VkBundle\Entity\VkUsers;
 use AppBundle\Lib\CookiesHelper;
-use AppBundle\Lib\SessionHelper;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Bundle\DoctrineBundle\Registry;
@@ -19,8 +18,11 @@ class Auth
     /** @var  string */
     private $type;
 
-    /** @var  Registry */
+    /** @var  Session */
     private $doctrine;
+
+    /** @var  Session */
+    private $session;
 
     const COOKIE_PARAM = 'auth';
 
@@ -29,8 +31,12 @@ class Auth
     const TYPE_VK = 'vk';
 
 
-    public function __construct(Registry $doctrine) {
+    public function __construct(Registry $doctrine, Session $session) {
         $this->doctrine = $doctrine;
+        $this->session = $session;
+        if (!$this->session->isStarted()) {
+            $this->session->start();
+        }
         $this->init();
     }
 
@@ -94,8 +100,6 @@ class Auth
     public function setAuth($type, $vkUserId, $token, $expiresIn, $email = null) {
         $this->type = $type;
 
-        varlog(func_get_args());
-
         $repository = $this->doctrine->getRepository('AcmeVkBundle:VkUsers');
         /** @var VkUsers $vkUser */
         $vkUser = $repository->find($vkUserId);
@@ -119,8 +123,8 @@ class Auth
         $this->vkUser = false;
         $this->type = false;
 
-        SessionHelper::remove('type');
-        SessionHelper::remove('vk_user');
+        $this->session->remove('type');
+        $this->session->remove('vk_user');
 
         CookiesHelper::setCookie(self::COOKIE_PARAM, 0, -1);
         CookiesHelper::setCookie(self::COOKIE_RE, 0, -1);
@@ -139,7 +143,7 @@ class Auth
             return true;
         }
         //Сессия протухла, проверим в cookies
-        if (!SessionHelper::get('type')) {
+        if (!$this->session->get('type')) {
             $request = Request::createFromGlobals();
             //Нужна переавтоизация
             $json = $request->cookies->get(self::COOKIE_PARAM);
@@ -149,8 +153,8 @@ class Auth
 
             return false;
         }
-        $this->vkUser = SessionHelper::get('vk_user');
-        $this->type = SessionHelper::get('type');
+        $this->vkUser = $this->session->get('vk_user');
+        $this->type = $this->session->get('type');
 
         return true;
     }
@@ -184,8 +188,8 @@ class Auth
     }
 
     private function saveToSession($token) {
-        SessionHelper::set('type', $this->type);
-        SessionHelper::set('vk_user', $this->vkUser);
+        $this->session->set('type', $this->type);
+        $this->session->set('vk_user', $this->vkUser);
 
         $cookie = [
             'type' => self::TYPE_VK,
