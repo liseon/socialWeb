@@ -11,5 +11,9 @@
     {{ form_widget(form) }}
     {{ form_end(form) }}
     <br>
-    <a href="{{ path('secured.index') }}">Не уведомлять меня!</a>
+    <br>
+    {{ form_start(formUnsubscribe) }}
+    {{ form_widget(formUnsubscribe) }}
+    {{ form_end(formUnsubscribe) }}
+    <br>
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace Acme\MainBundle\Controller;
 
+use Acme\MainBundle\AcmeMainBundle;
 use Acme\MainBundle\Entity\Subscriptions;
 use Acme\MainBundle\Lib\Auth;
 use Acme\VkBundle\Entity\VkParsingTasks;
@@ -89,14 +90,44 @@ class SecuredController extends Controller
         $auth = $this->getAuth();
         $subscription = new Subscriptions();
         $email = $auth->getVkEmail() ? : $auth->getEmail() ? : '';
-        $subscription->setEmail($email);
+        $subscription->setEmail($email)->setUser($auth->getVkUser()->getUser());
         $form = $this->createFormBuilder($subscription)
             ->add('email', 'email')
             ->add('subscr', 'submit', ['label' => 'Прислать уведомление'])
-            ->add('not_subscr', 'submit', ['label' => 'Не уведомлять'])
+            ->getForm();
+        $formUnsubscribe = $this->createFormBuilder($subscription)
+            ->add('not_subscr', 'submit', ['label' => 'Отписаться от рассылок'])
             ->getForm();
 
-        return ['form' => $form->createView()];
+        $form->handleRequest($request);
+        $formUnsubscribe->handleRequest($request);
+        if ($form->isValid() || $formUnsubscribe->isValid()) {
+            if ($formUnsubscribe->isValid()) {
+                $repository = $this->getDoctrine()->getRepository("AcmeMainBundle:Subscriptions");
+                $subscr = $repository->findOneByUser($auth->getId());
+                if ($subscr) {
+                    $subscription = $subscr;
+                }
+            } else {
+                $subscription = new Subscriptions();
+                $subscription->setEmail($email);
+                $subscription->setUser($auth->getVkUser()->getUser());
+            }
+
+            varlog($auth->getVkUser()->getUser()->getId());
+            //die();
+
+            $formUnsubscribe->isValid() &&  $subscription->setIsActive(false);
+            $form->isValid() && $subscription->setEmail($form->get('email')->getData());
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($subscription);
+            $em->flush();
+
+            return $this->redirectToRoute('secured.index');
+        }
+
+        return ['form' => $form->createView(), 'formUnsubscribe' => $formUnsubscribe->createView()];
     }
 
     /**

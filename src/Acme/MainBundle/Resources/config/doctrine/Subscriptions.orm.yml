@@ -2,12 +2,13 @@ Acme\MainBundle\Entity\Subscriptions:
     type: entity
     table: subscriptions
     indexes:
-        SECONDARY:
-            columns:
-                - user_id
         email:
             columns:
                 - email
+    uniqueConstraints:
+        SECONDARY:
+            columns:
+                - user_id
     id:
         id:
             type: integer

@@ -398,4 +398,15 @@ class Announces
     {
         return $this->moderator;
     }
+
+    /**
+     *  @ORM\PrePersist
+     */
+    public function doStuffOnPrePersist()
+    {
+        $this->setUpdatedAt(new \DateTime());
+        if (is_null($this->getCreatedAt())) {
+            $this->setCreatedAt(new \DateTime());
+        }
+    }
 }

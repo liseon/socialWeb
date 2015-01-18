@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Subscriptions
  *
- * @ORM\Table(name="subscriptions", indexes={@ORM\Index(name="SECONDARY", columns={"user_id"}), @ORM\Index(name="email", columns={"email"})})
+ * @ORM\Table(name="subscriptions", uniqueConstraints={@ORM\UniqueConstraint(name="SECONDARY", columns={"user_id"})}, indexes=@ORM\Index(name="email", columns={"email"}))
  * @ORM\Entity
  */
 class Subscriptions
@@ -33,7 +33,7 @@ class Subscriptions
      *
      * @ORM\Column(name="is_active", type="boolean", nullable=false)
      */
-    private $isActive;
+    private $isActive = true;
 
     /**
      * @var \DateTime
@@ -169,8 +169,7 @@ class Subscriptions
      * @param \Acme\MainBundle\Entity\Users $user
      * @return Subscriptions
      */
-    public function setUser(\Acme\MainBundle\Entity\Users $user = null)
-    {
+    public function setUser(Users $user = null) {
         $this->user = $user;
 
         return $this;
@@ -184,5 +183,16 @@ class Subscriptions
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     *  @ORM\PrePersist
+     */
+    public function doStuffOnPrePersist()
+    {
+        $this->setUpdatedAt(new \DateTime());
+        if (is_null($this->getCreatedAt())) {
+            $this->setCreatedAt(new \DateTime());
+        }
     }
 }

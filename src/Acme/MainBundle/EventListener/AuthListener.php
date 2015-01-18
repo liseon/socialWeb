@@ -44,10 +44,7 @@ class AuthListener
         /** @var Auth $auth */
         $auth = $controller[0]->get('acme_main.auth');
         if (!$auth->check()) {
-            varlog($event->getRequest()->getSession()->get('type'));
-            varlog($event->getRequest()->getSession()->get('vk_user'));
-            die("FUck!");
-            //throw new NotAuthException();
+            throw new NotAuthException();
         }
     }
 }

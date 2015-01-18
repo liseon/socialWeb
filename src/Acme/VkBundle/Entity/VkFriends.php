@@ -139,4 +139,15 @@ class VkFriends
     {
         return $this->friend;
     }
+
+    /**
+     *  @ORM\PrePersist
+     */
+    public function doStuffOnPrePersist()
+    {
+        $this->setUpdatedAt(new \DateTime());
+        if (is_null($this->getCreatedAt())) {
+            $this->setCreatedAt(new \DateTime());
+        }
+    }
 }

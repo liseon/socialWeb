@@ -152,4 +152,15 @@ class VkParsingStat
     {
         return $this->waiting;
     }
+
+    /**
+     *  @ORM\PrePersist
+     */
+    public function doStuffOnPrePersist()
+    {
+        $this->setUpdatedAt(new \DateTime());
+        if (is_null($this->getCreatedAt())) {
+            $this->setCreatedAt(new \DateTime());
+        }
+    }
 }
