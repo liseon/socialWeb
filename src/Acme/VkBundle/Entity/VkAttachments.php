@@ -71,9 +71,9 @@ class VkAttachments
     private $updatedAt;
 
     /**
-     * @var \Acme\VkBundle\Entity\Announces
+     * @var \Acme\MainBundle\Entity\Announces
      *
-     * @ORM\ManyToOne(targetEntity="Acme\VkBundle\Entity\Announces")
+     * @ORM\ManyToOne(targetEntity="\Acme\MainBundle\Entity\Announces")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="announce_id", referencedColumnName="id")
      * })
@@ -81,9 +81,9 @@ class VkAttachments
     private $announce;
 
     /**
-     * @var \Acme\VkBundle\Entity\Moderators
+     * @var \Acme\MainBundle\Entity\Moderators
      *
-     * @ORM\ManyToOne(targetEntity="Acme\VkBundle\Entity\Moderators")
+     * @ORM\ManyToOne(targetEntity="\Acme\MainBundle\Entity\Moderators")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="moderator_id", referencedColumnName="id")
      * })
@@ -276,10 +276,10 @@ class VkAttachments
     /**
      * Set announce
      *
-     * @param \Acme\VkBundle\Entity\Announces $announce
+     * @param \Acme\MainBundle\Entity\Announces $announce
      * @return VkAttachments
      */
-    public function setAnnounce(\Acme\VkBundle\Entity\Announces $announce = null)
+    public function setAnnounce(\Acme\MainBundle\Entity\Announces $announce = null)
     {
         $this->announce = $announce;
 
@@ -289,7 +289,7 @@ class VkAttachments
     /**
      * Get announce
      *
-     * @return \Acme\VkBundle\Entity\Announces 
+     * @return \Acme\MainBundle\Entity\Announces
      */
     public function getAnnounce()
     {
@@ -299,10 +299,10 @@ class VkAttachments
     /**
      * Set moderator
      *
-     * @param \Acme\VkBundle\Entity\Moderators $moderator
+     * @param \Acme\MainBundle\Entity\Moderators $moderator
      * @return VkAttachments
      */
-    public function setModerator(\Acme\VkBundle\Entity\Moderators $moderator = null)
+    public function setModerator(\Acme\MainBundle\Entity\Moderators $moderator = null)
     {
         $this->moderator = $moderator;
 
@@ -312,7 +312,7 @@ class VkAttachments
     /**
      * Get moderator
      *
-     * @return \Acme\VkBundle\Entity\Moderators 
+     * @return\Acme\MainBundle\Entity\Moderators
      */
     public function getModerator()
     {

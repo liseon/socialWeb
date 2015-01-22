@@ -5,7 +5,14 @@ Acme\VkBundle\Entity\VkFriends:
         friend:
             columns:
                 - friend_id
-    id: {  }
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
     fields:
         createdAt:
             type: datetime
@@ -18,17 +25,17 @@ Acme\VkBundle\Entity\VkFriends:
             default: CURRENT_TIMESTAMP
             column: updated_at
     oneToOne:
-        id:
+        vkUser:
             targetEntity: VkUsers
             cascade: {  }
             mappedBy: null
             inversedBy: null
             joinColumns:
-                id:
+                vk_id:
                     referencedColumnName: vk_id
             orphanRemoval: false
     manyToOne:
-        friend:
+        vkFriend:
             targetEntity: VkUsers
             cascade: {  }
             mappedBy: null

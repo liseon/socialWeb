@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class VkFriends
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
@@ -34,7 +43,7 @@ class VkFriends
      *   @ORM\JoinColumn(name="id", referencedColumnName="vk_id", unique=true)
      * })
      */
-    private $id;
+    private $vkUser;
 
     /**
      * @var \Acme\VkBundle\Entity\VkUsers
@@ -44,7 +53,7 @@ class VkFriends
      *   @ORM\JoinColumn(name="friend_id", referencedColumnName="vk_id")
      * })
      */
-    private $friend;
+    private $vkFriend;
 
 
 

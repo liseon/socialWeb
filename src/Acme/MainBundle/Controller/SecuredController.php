@@ -91,7 +91,12 @@ class SecuredController extends Controller
         $subscription = new Subscriptions();
         $email = $auth->getVkEmail() ? : $auth->getEmail() ? : '';
         $subscription->setEmail($email)->setUser($auth->getVkUser()->getUser());
-        $form = $this->createFormBuilder($subscription)
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($subscription);
+        $em->flush();
+
+       /* $form = $this->createFormBuilder($subscription)
             ->add('email', 'email')
             ->add('subscr', 'submit', ['label' => 'Прислать уведомление'])
             ->getForm();
@@ -127,7 +132,8 @@ class SecuredController extends Controller
             return $this->redirectToRoute('secured.index');
         }
 
-        return ['form' => $form->createView(), 'formUnsubscribe' => $formUnsubscribe->createView()];
+        return ['form' => $form->createView(), 'formUnsubscribe' => $formUnsubscribe->createView()];*/
+        die();
     }
 
     /**
