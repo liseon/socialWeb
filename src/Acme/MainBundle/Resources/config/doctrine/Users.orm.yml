@@ -37,4 +37,5 @@ Acme\MainBundle\Entity\Users:
             nullable: false
             default: CURRENT_TIMESTAMP
             column: updated_at
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [doStuffOnPrePersist]

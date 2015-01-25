@@ -48,4 +48,5 @@ Acme\MainBundle\Entity\Subscriptions:
                 user_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [doStuffOnPrePersist]

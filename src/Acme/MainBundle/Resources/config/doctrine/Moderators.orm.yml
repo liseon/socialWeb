@@ -28,4 +28,5 @@ Acme\MainBundle\Entity\Moderators:
             type: integer
             nullable: false
             unsigned: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [doStuffOnPrePersist]

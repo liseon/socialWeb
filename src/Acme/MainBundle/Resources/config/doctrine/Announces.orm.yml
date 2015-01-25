@@ -90,4 +90,5 @@ Acme\MainBundle\Entity\Announces:
                 moderator_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [doStuffOnPrePersist]

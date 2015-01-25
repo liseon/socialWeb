@@ -52,4 +52,5 @@ Acme\VkBundle\Entity\VkUsers:
                 user_id:
                     referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [doStuffOnPrePersist]

@@ -10,6 +10,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
  *
  * @ORM\Table(name="users", indexes={@ORM\Index(name="SECONDARY", columns={"email"})})
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class Users
 {
