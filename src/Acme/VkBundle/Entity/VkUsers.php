@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * VkUsers
  *
- * @ORM\Table(name="vk_users", uniqueConstraints={@ORM\UniqueConstraint(name="SECONDARY", columns={"user_id"})}, indexes={@ORM\Index(name="email", columns={"email"})})
+ * @ORM\Table(name="vk_users", uniqueConstraints={@ORM\UniqueConstraint(name="SECONDARY", columns={"user_id"}), @ORM\UniqueConstraint(name="VKID", columns={"vk_id"})}, indexes={@ORM\Index(name="email", columns={"email"})})
  * @ORM\Entity
  */
 class VkUsers
@@ -15,8 +15,16 @@ class VkUsers
     /**
      * @var integer
      *
-     * @ORM\Column(name="vk_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="vk_id", type="integer")
      */
     private $vkId;
 
@@ -64,6 +72,28 @@ class VkUsers
      * })
      */
     private $user;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return VkUsers
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+
 
     /**
      * Set vkId

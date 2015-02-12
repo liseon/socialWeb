@@ -44,4 +44,5 @@ Acme\VkBundle\Entity\VkFriends:
                 friend_id:
                     referencedColumnName: vk_id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [doStuffOnPrePersist]

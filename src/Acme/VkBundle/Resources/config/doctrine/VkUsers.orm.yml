@@ -9,14 +9,23 @@ Acme\VkBundle\Entity\VkUsers:
         SECONDARY:
             columns:
                 - user_id
+        VKID:
+            columns:
+                - vk_id
     id:
-        vkId:
+        id:
             type: integer
             nullable: false
             unsigned: false
             id: true
-            column: vk_id
+            generator:
+                strategy: IDENTITY
     fields:
+        vkId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: vk_id
         email:
             type: string
             nullable: true
@@ -50,6 +59,7 @@ Acme\VkBundle\Entity\VkUsers:
             inversedBy: null
             joinColumns:
                 user_id:
+                    nullable: false
                     referencedColumnName: id
             orphanRemoval: false
     lifecycleCallbacks:

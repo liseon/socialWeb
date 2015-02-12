@@ -142,14 +142,16 @@ class SecuredController extends Controller
      */
     public function actionCreateTasks(Request $request) {
         $auth = $this->getAuth();
+        $vkUser = $auth->getVkUser();
 
         $repository = $this->getDoctrine()->getRepository("AcmeVkBundle:VkParsingTasks");
-        if (!$repository->findOneByVkUser($auth->getVkUser())) {
+        if (!$repository->findOneByVkUser($vkUser)) {
             $task1 = new VkParsingTasks();
-            $task1->setVkUser($auth->getVkUser())->setLevel(0);
+            $task1->setVkUser($vkUser)->setLevel(0);
             $task2 = new VkParsingTasks();
-            $task2->setVkUser($auth->getVkUser())->setLevel(1);
+            $task2->setVkUser($vkUser)->setLevel(1);
             $em = $this->getDoctrine()->getManager();
+            $em->persist($vkUser);
             $em->persist($task1);
             $em->persist($task2);
             $em->flush();

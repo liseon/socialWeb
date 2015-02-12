@@ -44,6 +44,8 @@ Acme\VkBundle\Entity\VkParsingTasks:
             inversedBy: null
             joinColumns:
                 vk_user_id:
-                    referencedColumnName: vk_id
+                    nullable: false
+                    referencedColumnName: id
             orphanRemoval: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [doStuffOnPrePersist]

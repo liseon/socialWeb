@@ -50,11 +50,11 @@ class VkParsingTasks
     private $isDone = false;
 
     /**
-     * @var \Acme\VkBundle\Entity\VkUsers
+     * @var VkUsers
      *
-     * @ORM\ManyToOne(targetEntity="Acme\VkBundle\Entity\VkUsers")
+     * @ORM\ManyToOne(targetEntity="VkUsers")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="vk_user_id", referencedColumnName="vk_id")
+     *   @ORM\JoinColumn(name="vk_user_id", referencedColumnName="id")
      * })
      */
     private $vkUser;
@@ -166,10 +166,10 @@ class VkParsingTasks
     /**
      * Set vkUser
      *
-     * @param \Acme\VkBundle\Entity\VkUsers $vkUser
+     * @param VkUsers $vkUser
      * @return VkParsingTasks
      */
-    public function setVkUser(\Acme\VkBundle\Entity\VkUsers $vkUser = null)
+    public function setVkUser(VkUsers $vkUser = null)
     {
         $this->vkUser = $vkUser;
 
@@ -179,7 +179,7 @@ class VkParsingTasks
     /**
      * Get vkUser
      *
-     * @return \Acme\VkBundle\Entity\VkUsers 
+     * @return VkUsers
      */
     public function getVkUser()
     {

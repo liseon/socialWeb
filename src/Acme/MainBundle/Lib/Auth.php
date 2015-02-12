@@ -102,7 +102,7 @@ class Auth
 
         $repository = $this->doctrine->getRepository('AcmeVkBundle:VkUsers');
         /** @var VkUsers $vkUser */
-        $vkUser = $repository->find($vkUserId);
+        $vkUser = $repository->findOneBy(['vkId' => $vkUserId]);
         //Новый пользователь
         if (!$vkUser) {
             $mainUser = new Users();

@@ -31,4 +31,5 @@ Acme\VkBundle\Entity\VkParsingStat:
             type: integer
             nullable: false
             unsigned: false
-    lifecycleCallbacks: {  }
+    lifecycleCallbacks:
+        prePersist: [doStuffOnPrePersist]
