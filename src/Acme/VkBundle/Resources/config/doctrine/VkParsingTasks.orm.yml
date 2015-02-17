@@ -39,13 +39,13 @@ Acme\VkBundle\Entity\VkParsingTasks:
     manyToOne:
         vkUser:
             targetEntity: VkUsers
-            cascade: {  }
+            cascade: ["persist"]
             mappedBy: null
             inversedBy: null
             joinColumns:
                 vk_user_id:
                     nullable: false
-                    referencedColumnName: id
+                    referencedColumnName: vk_id
             orphanRemoval: false
     lifecycleCallbacks:
         prePersist: [doStuffOnPrePersist]

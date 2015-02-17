@@ -143,6 +143,7 @@ class SecuredController extends Controller
     public function actionCreateTasks(Request $request) {
         $auth = $this->getAuth();
         $vkUser = $auth->getVkUser();
+        varlog($vkUser->getId());
 
         $repository = $this->getDoctrine()->getRepository("AcmeVkBundle:VkParsingTasks");
         if (!$repository->findOneByVkUser($vkUser)) {
@@ -151,7 +152,6 @@ class SecuredController extends Controller
             $task2 = new VkParsingTasks();
             $task2->setVkUser($vkUser)->setLevel(1);
             $em = $this->getDoctrine()->getManager();
-            $em->persist($vkUser);
             $em->persist($task1);
             $em->persist($task2);
             $em->flush();

@@ -52,9 +52,9 @@ class VkParsingTasks
     /**
      * @var VkUsers
      *
-     * @ORM\ManyToOne(targetEntity="VkUsers")
+     * @ORM\ManyToOne(targetEntity="VkUsers", cascade={"persist"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="vk_user_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="vk_user_id", referencedColumnName="vk_id")
      * })
      */
     private $vkUser;

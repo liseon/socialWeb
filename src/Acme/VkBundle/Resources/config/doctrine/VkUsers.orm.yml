@@ -54,7 +54,7 @@ Acme\VkBundle\Entity\VkUsers:
     manyToOne:
         user:
             targetEntity: \Acme\MainBundle\Entity\Users
-            cascade: {  }
+            cascade: ["persist"]
             mappedBy: null
             inversedBy: null
             joinColumns:

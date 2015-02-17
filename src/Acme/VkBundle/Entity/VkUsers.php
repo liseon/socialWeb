@@ -66,7 +66,7 @@ class VkUsers
     /**
      * @var \Acme\MainBundle\Entity\Users
      *
-     * @ORM\ManyToOne(targetEntity="Acme\MainBundle\Entity\Users")
+     * @ORM\ManyToOne(targetEntity="Acme\MainBundle\Entity\Users", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
