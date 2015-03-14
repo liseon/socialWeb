@@ -51,12 +51,18 @@ class SecuredController extends Controller
         $user = $repository->find($auth->getId());
         $repository = $this->getDoctrine()->getRepository('AcmeVkBundle:VkUsers');
         $vkUser = $repository->find($auth->getVkId());
+        $em = $this->getDoctrine()->getManager();
         if (!is_null($vkUser) && !is_null($user)) {
-            $em = $this->getDoctrine()->getManager();
             $em->remove($vkUser);
             $em->remove($user);
-            $em->flush();
         }
+        $repository = $this->getDoctrine()->getRepository('AcmeMainBundle:Subscriptions');
+        $subscription = $repository->findOneByUser($auth->getId());
+        if (!is_null($subscription)) {
+            $em->remove($subscription);
+        }
+        $em->flush();
+        
         $auth->logout();
 
         return $this->redirectToRoute("landingpage");
@@ -90,13 +96,9 @@ class SecuredController extends Controller
         $auth = $this->getAuth();
         $subscription = new Subscriptions();
         $email = $auth->getVkEmail() ? : $auth->getEmail() ? : '';
-        $subscription->setEmail($email)->setUser($auth->getVkUser()->getUser());
+        $subscription->setEmail($email)->setUser($auth->getId());
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($subscription);
-        $em->flush();
-
-       /* $form = $this->createFormBuilder($subscription)
+        $form = $this->createFormBuilder($subscription)
             ->add('email', 'email')
             ->add('subscr', 'submit', ['label' => 'Прислать уведомление'])
             ->getForm();
@@ -106,34 +108,32 @@ class SecuredController extends Controller
 
         $form->handleRequest($request);
         $formUnsubscribe->handleRequest($request);
-        if ($form->isValid() || $formUnsubscribe->isValid()) {
-            if ($formUnsubscribe->isValid()) {
-                $repository = $this->getDoctrine()->getRepository("AcmeMainBundle:Subscriptions");
-                $subscr = $repository->findOneByUser($auth->getId());
-                if ($subscr) {
-                    $subscription = $subscr;
-                }
-            } else {
-                $subscription = new Subscriptions();
-                $subscription->setEmail($email);
-                $subscription->setUser($auth->getVkUser()->getUser());
+
+        if (!$formUnsubscribe->isValid() && !$form->isValid()) {
+            return ['form' => $form->createView(), 'formUnsubscribe' => $formUnsubscribe->createView()];
+        }
+        $repository = $this->getDoctrine()->getRepository("AcmeMainBundle:Subscriptions");
+        $subscription = $repository->findOneByUser($auth->getId());
+
+        if ($formUnsubscribe->isValid()) {
+            if (!($subscription instanceof Subscriptions)) {
+
+                return $this->redirectToRoute('secured.index');
             }
-
-            varlog($auth->getVkUser()->getUser()->getId());
-            //die();
-
-            $formUnsubscribe->isValid() &&  $subscription->setIsActive(false);
-            $form->isValid() && $subscription->setEmail($form->get('email')->getData());
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($subscription);
-            $em->flush();
-
-            return $this->redirectToRoute('secured.index');
+            $subscription->setIsActive(false);
+        } elseif ($form->isValid()) {
+            if (!($subscription instanceof Subscriptions)) {
+                $subscription = new Subscriptions();
+                $subscription->setUser($auth->getId());
+            }
+            $subscription->setEmail($email);
         }
 
-        return ['form' => $form->createView(), 'formUnsubscribe' => $formUnsubscribe->createView()];*/
-        die();
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($subscription);
+        $em->flush();
+
+        return $this->redirectToRoute('secured.index');
     }
 
     /**
@@ -143,14 +143,13 @@ class SecuredController extends Controller
     public function actionCreateTasks(Request $request) {
         $auth = $this->getAuth();
         $vkUser = $auth->getVkUser();
-        varlog($vkUser->getId());
 
         $repository = $this->getDoctrine()->getRepository("AcmeVkBundle:VkParsingTasks");
-        if (!$repository->findOneByVkUser($vkUser)) {
+        if (!$repository->findOneByVkUser($vkUser->getVkId())) {
             $task1 = new VkParsingTasks();
-            $task1->setVkUser($vkUser)->setLevel(0);
+            $task1->setVkUser($vkUser->getVkId())->setLevel(0);
             $task2 = new VkParsingTasks();
-            $task2->setVkUser($vkUser)->setLevel(1);
+            $task2->setVkUser($vkUser->getVkId())->setLevel(1);
             $em = $this->getDoctrine()->getManager();
             $em->persist($task1);
             $em->persist($task2);
@@ -158,7 +157,9 @@ class SecuredController extends Controller
         }
 
         $repository = $this->getDoctrine()->getRepository("AcmeMainBundle:Subscriptions");
-        if ($repository->findOneByUser($auth->getId())) {
+        $subscription = $repository->findOneByUser($auth->getId());
+        /** @var Subscriptions $subscription */
+        if ($subscription && $subscription->getIsActive()) {
             return $this->redirectToRoute('secured.index');
         }
 

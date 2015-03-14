@@ -50,12 +50,8 @@ class Subscriptions
     private $updatedAt;
 
     /**
-     * @var \Acme\MainBundle\Entity\Users
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Acme\MainBundle\Entity\Users")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     * })
      */
     private $user;
 
@@ -166,11 +162,11 @@ class Subscriptions
     /**
      * Set user
      *
-     * @param \Acme\MainBundle\Entity\Users $user
+     * @param int $user
      * @return Subscriptions
      */
-    public function setUser(Users $user = null) {
-        $this->user = $user;
+    public function setUser($user = 0) {
+        $this->user = (int)$user;
 
         return $this;
     }
@@ -178,7 +174,7 @@ class Subscriptions
     /**
      * Get user
      *
-     * @return \Acme\MainBundle\Entity\Users 
+     * @return int
      */
     public function getUser()
     {

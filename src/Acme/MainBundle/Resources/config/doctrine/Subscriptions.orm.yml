@@ -38,15 +38,10 @@ Acme\MainBundle\Entity\Subscriptions:
             nullable: false
             default: CURRENT_TIMESTAMP
             column: updated_at
-    manyToOne:
         user:
-            targetEntity: Users
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                user_id:
-                    referencedColumnName: id
-            orphanRemoval: false
+            type: integer
+            nullable: false
+            default: 0
+            column: user_id
     lifecycleCallbacks:
         prePersist: [doStuffOnPrePersist]

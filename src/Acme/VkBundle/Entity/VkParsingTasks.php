@@ -50,12 +50,8 @@ class VkParsingTasks
     private $isDone = false;
 
     /**
-     * @var VkUsers
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="VkUsers", cascade={"persist"})
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="vk_user_id", referencedColumnName="vk_id")
-     * })
      */
     private $vkUser;
 
@@ -166,12 +162,12 @@ class VkParsingTasks
     /**
      * Set vkUser
      *
-     * @param VkUsers $vkUser
+     * @param int $vkUserId
      * @return VkParsingTasks
      */
-    public function setVkUser(VkUsers $vkUser = null)
+    public function setVkUser($vkUserId = 0)
     {
-        $this->vkUser = $vkUser;
+        $this->vkUser = (int)$vkUserId;
 
         return $this;
     }
@@ -179,7 +175,7 @@ class VkParsingTasks
     /**
      * Get vkUser
      *
-     * @return VkUsers
+     * @return int
      */
     public function getVkUser()
     {
