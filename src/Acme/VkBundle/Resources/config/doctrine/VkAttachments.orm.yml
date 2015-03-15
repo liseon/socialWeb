@@ -2,13 +2,13 @@ Acme\VkBundle\Entity\VkAttachments:
     type: entity
     table: vk_attachments
     indexes:
-        SECONDARY:
+        announce_id:
             columns:
                 - announce_id
         moderator:
             columns:
                 - moderator_id
-        fk_attachments_3_idx:
+        vk_id:
             columns:
                 - vk_id
     id:
@@ -54,33 +54,17 @@ Acme\VkBundle\Entity\VkAttachments:
             nullable: false
             default: CURRENT_TIMESTAMP
             column: updated_at
-    manyToOne:
         announce:
-            targetEntity: \Acme\MainBundle\Entity\Announces
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                announce_id:
-                    referencedColumnName: id
-            orphanRemoval: false
+            type: integer
+            nullable: false
+            column: announce_id
         moderator:
-            targetEntity: \Acme\MainBundle\Entity\Moderators
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                moderator_id:
-                    referencedColumnName: id
-            orphanRemoval: false
+            type: integer
+            nullable: false
+            column: moderator_id
         vk:
-            targetEntity: VkUsers
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                vk_id:
-                    referencedColumnName: vk_id
-            orphanRemoval: false
+            type: integer
+            nullable: false
+            column: vk_id
     lifecycleCallbacks:
         prePersist: [doStuffOnPrePersist]

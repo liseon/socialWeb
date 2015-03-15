@@ -6,7 +6,7 @@ Acme\VkBundle\Entity\VkUsers:
             columns:
                 - email
     uniqueConstraints:
-        SECONDARY:
+        user_id:
             columns:
                 - user_id
         VKID:

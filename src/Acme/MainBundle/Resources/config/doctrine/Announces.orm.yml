@@ -2,7 +2,7 @@ Acme\MainBundle\Entity\Announces:
     type: entity
     table: Announces
     indexes:
-        SECONDARY:
+        for_user_id:
             columns:
                 - for_user_id
         moderator:
@@ -71,24 +71,13 @@ Acme\MainBundle\Entity\Announces:
             nullable: false
             default: CURRENT_TIMESTAMP
             column: updated_at
-    manyToOne:
         forUser:
-            targetEntity: Users
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                for_user_id:
-                    referencedColumnName: id
-            orphanRemoval: false
+            type: integer
+            nullable: false
+            column: for_user_id
         moderator:
-            targetEntity: Moderators
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                moderator_id:
-                    referencedColumnName: id
-            orphanRemoval: false
+            type: integer
+            nullable: false
+            column: moderator_id
     lifecycleCallbacks:
         prePersist: [doStuffOnPrePersist]

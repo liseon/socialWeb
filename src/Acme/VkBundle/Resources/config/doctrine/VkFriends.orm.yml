@@ -24,25 +24,13 @@ Acme\VkBundle\Entity\VkFriends:
             nullable: false
             default: CURRENT_TIMESTAMP
             column: updated_at
-    oneToOne:
         vkUser:
-            targetEntity: VkUsers
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                vk_id:
-                    referencedColumnName: vk_id
-            orphanRemoval: false
-    manyToOne:
+            type: integer
+            nullable: false
+            column: vk_id
         vkFriend:
-            targetEntity: VkUsers
-            cascade: {  }
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                friend_id:
-                    referencedColumnName: vk_id
-            orphanRemoval: false
+            type: integer
+            nullable: false
+            column: friend_id
     lifecycleCallbacks:
         prePersist: [doStuffOnPrePersist]

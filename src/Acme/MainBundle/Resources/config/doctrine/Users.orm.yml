@@ -2,7 +2,7 @@ Acme\MainBundle\Entity\Users:
     type: entity
     table: users
     indexes:
-        SECONDARY:
+        email:
             columns:
                 - email
     id:
