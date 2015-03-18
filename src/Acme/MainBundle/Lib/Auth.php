@@ -110,7 +110,7 @@ class Auth
             $em->persist($mainUser);
             $vkUser = new VkUsers();
             $vkUser->setVkId($vkUserId)->setToken($token)->setUser($mainUser)->setEmail($email);
-            $vkUser->setTokenExpiresAt(new \DateTime(date_create(time() + $expiresIn)));
+            $vkUser->setTokenExpiresAt(date_create()->setTimestamp(time() + $expiresIn));
             $em->persist($vkUser);
             $em->flush();
         }

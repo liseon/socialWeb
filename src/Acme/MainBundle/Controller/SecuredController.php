@@ -47,20 +47,26 @@ class SecuredController extends Controller
      */
     public function deleteAction(Request $request) {
         $auth = $this->getAuth();
+
+        $em = $this->getDoctrine()->getManager();
         $repository = $this->getDoctrine()->getRepository('AcmeMainBundle:Users');
         $user = $repository->find($auth->getId());
+        !is_null($user) && $em->remove($user);
+
         $repository = $this->getDoctrine()->getRepository('AcmeVkBundle:VkUsers');
-        $vkUser = $repository->find($auth->getVkId());
-        $em = $this->getDoctrine()->getManager();
-        if (!is_null($vkUser) && !is_null($user)) {
-            $em->remove($vkUser);
-            $em->remove($user);
-        }
+        $vkUser = $repository->findOneByVkId($auth->getVkId());
+        !is_null($vkUser) && $em->remove($vkUser);
+
         $repository = $this->getDoctrine()->getRepository('AcmeMainBundle:Subscriptions');
         $subscription = $repository->findOneByUser($auth->getId());
-        if (!is_null($subscription)) {
-            $em->remove($subscription);
+        !is_null($user) && $em->remove($subscription);
+
+        $repository = $this->getDoctrine()->getRepository('AcmeVkBundle:VkParsingTasks');
+        $tasks = $repository->findByVkUser($auth->getVkId());
+        foreach ($tasks as $task) {
+            !is_null($task) && $em->remove($task);
         }
+
         $em->flush();
         
         $auth->logout();

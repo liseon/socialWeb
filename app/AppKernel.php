@@ -49,7 +49,7 @@ function varlog() {
             echo "{$mess} \n";
         } else {
             echo "$mess <br>";
-            error_log($mess);
+            error_log($mess, E_ERROR);
         }
     }
 }

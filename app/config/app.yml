@@ -1,4 +1,4 @@
 domain:
-    full:   'http://localhost:8000/'
+    full:   'http://auto.workoutblog.ru/'
     vk:
         callback:   'vk/callback/'
