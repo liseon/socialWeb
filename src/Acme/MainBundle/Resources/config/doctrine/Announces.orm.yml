@@ -31,6 +31,18 @@ Acme\MainBundle\Entity\Announces:
             nullable: false
             unsigned: false
             column: owner_id
+        ownerUrl:
+            type: string
+            nullable: false
+            length: 255
+            fixed: false
+            column: owner_url
+        ownerPhoto:
+            type: string
+            nullable: false
+            length: 255
+            fixed: false
+            column: owner_photo
         postId:
             type: integer
             nullable: false

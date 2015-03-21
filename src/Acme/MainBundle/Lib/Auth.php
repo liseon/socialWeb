@@ -99,6 +99,7 @@ class Auth
      */
     public function setAuth($type, $vkUserId, $token, $expiresIn, $email = null) {
         $this->type = $type;
+        $em = $this->doctrine->getManager();
 
         $repository = $this->doctrine->getRepository('AcmeVkBundle:VkUsers');
         /** @var VkUsers $vkUser */
@@ -106,14 +107,16 @@ class Auth
         //Новый пользователь
         if (!$vkUser) {
             $mainUser = new Users();
-            $em = $this->doctrine->getManager();
             $em->persist($mainUser);
             $vkUser = new VkUsers();
-            $vkUser->setVkId($vkUserId)->setToken($token)->setUser($mainUser)->setEmail($email);
-            $vkUser->setTokenExpiresAt(date_create()->setTimestamp(time() + $expiresIn));
-            $em->persist($vkUser);
-            $em->flush();
+            $vkUser->setVkId($vkUserId)->setUser($mainUser)->setEmail($email);
         }
+        //Обновить токен!
+        $vkUser->setToken($token)->setTokenExpiresAt(date_create()->setTimestamp(time() + $expiresIn));
+
+        $em->persist($vkUser);
+        $em->flush();
+
         $this->vkUser = $vkUser;
 
         $this->saveToSession($token);

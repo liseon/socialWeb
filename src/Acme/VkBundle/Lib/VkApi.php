@@ -3,10 +3,16 @@
 namespace Acme\VkBundle\Lib;
 
 use AppBundle\Lib\ConfigHelper;
-use AppBundle\Patterns\Singleton;
 use AppBundle\Lib\CurlHelper;
 
-class VkApi extends Singleton
+/**
+ * Class VkApi
+ * @package Acme\VkBundle\Lib
+ *
+ * @di acme_vk.api_lib
+ */
+
+class VkApi
 {
     private $token = '';
 
@@ -83,14 +89,14 @@ class VkApi extends Singleton
 
     /**
      * @param $id
-     * @param Vk_FriendsCollection|null $clean
-     * @return Vk_FriendsCollection
+     * @param VkFriendsCollection|null $clean
+     * @return VkFriendsCollection
      */
-    public function friendsGet($id, $clean = null) {
+    public function fetchFriends($id, VkFriendsCollection $clean = null) {
         if (!$this->startTime) {
             $this->startTime = time();
         }
-        return new Vk_FriendsCollection(
+        return new VkFriendsCollection(
             $this->requestApi(
                 'friends.get',
                 [
@@ -105,10 +111,10 @@ class VkApi extends Singleton
     /**
      * @param $id
      * @param $limit
-     * @return Vk_PostsCollection
+     * @return VkPostsCollection
      */
     public function wallGet($id, $limit){
-        return new Vk_PostsCollection(
+        return new VkPostsCollection(
             $this->requestApi(
                 'wall.get',
                 [
@@ -156,7 +162,7 @@ class VkApi extends Singleton
             $result = array_merge($result, $wall);
         }
 
-        return new Vk_PostsCollection(
+        return new VkPostsCollection(
             $result
         );
     }

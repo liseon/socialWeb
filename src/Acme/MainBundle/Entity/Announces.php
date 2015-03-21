@@ -36,6 +36,20 @@ class Announces
     private $ownerId;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="owner_url", type="string", nullable=false)
+     */
+    private $ownerUrl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="owner_photo", type="string", nullable=false)
+     */
+    private $ownerPhoto;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="post_id", type="integer", nullable=false)
@@ -122,6 +136,46 @@ class Announces
     {
         return $this->id;
     }
+
+    /**
+     * @return string
+     */
+    public function getOwnerUrl()
+    {
+        return $this->ownerUrl;
+    }
+
+    /**
+     * @param string $ownerUrl
+     * @return Announces
+     */
+    public function setOwnerUrl($ownerUrl)
+    {
+        $this->ownerUrl = $ownerUrl;
+
+        return $this;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getOwnerPhoto()
+    {
+        return $this->ownerPhoto;
+    }
+
+    /**
+     * @param string $ownerPhoto
+     * @return Announces
+     */
+    public function setOwnerPhoto($ownerPhoto)
+    {
+        $this->ownerUrl = $ownerPhoto;
+
+        return $this;
+    }
+
 
     /**
      * Set sourceType

@@ -53,7 +53,7 @@ class VkParsingTasks
      * @var int
      *
      */
-    private $vkUser;
+    private $vkUserId;
 
 
 
@@ -165,9 +165,9 @@ class VkParsingTasks
      * @param int $vkUserId
      * @return VkParsingTasks
      */
-    public function setVkUser($vkUserId = 0)
+    public function setVkUserId($vkUserId = 0)
     {
-        $this->vkUser = (int)$vkUserId;
+        $this->vkUserId = (int)$vkUserId;
 
         return $this;
     }
@@ -177,9 +177,9 @@ class VkParsingTasks
      *
      * @return int
      */
-    public function getVkUser()
+    public function getVkUserId()
     {
-        return $this->vkUser;
+        return $this->vkUserId;
     }
 
     /**

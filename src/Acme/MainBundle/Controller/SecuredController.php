@@ -151,11 +151,11 @@ class SecuredController extends Controller
         $vkUser = $auth->getVkUser();
 
         $repository = $this->getDoctrine()->getRepository("AcmeVkBundle:VkParsingTasks");
-        if (!$repository->findOneByVkUser($vkUser->getVkId())) {
+        if (!$repository->findOneByVkUserId($vkUser->getVkId())) {
             $task1 = new VkParsingTasks();
-            $task1->setVkUser($vkUser->getVkId())->setLevel(0);
+            $task1->setVkUserId($vkUser->getVkId())->setLevel(0);
             $task2 = new VkParsingTasks();
-            $task2->setVkUser($vkUser->getVkId())->setLevel(1);
+            $task2->setVkUserId($vkUser->getVkId())->setLevel(1);
             $em = $this->getDoctrine()->getManager();
             $em->persist($task1);
             $em->persist($task2);

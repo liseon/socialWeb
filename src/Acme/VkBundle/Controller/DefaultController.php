@@ -18,14 +18,22 @@ use Acme\VkBundle\Lib\VkApi;
  * Class DefaultController
  * @package Acme\VkBundle\Controller
  *
+ *
  */
 class DefaultController extends Controller
 {
     /**
+     * @return VkApi
+     */
+    public function getApi() {
+        return $this->container->get('acme_vk.api_lib');
+    }
+
+    /**
      * @Route("callback/", name = "vk.callback")
      */
     public function callbackAction(Request $request) {
-        $result = VkApi::getInstance()->getNewAccessToken($request->get(VkApi::PARAM_CODE));
+        $result = $this->getApi()->getNewAccessToken($request->get(VkApi::PARAM_CODE));
         if (!is_array($result) || !isset($result['access_token'])) {
 
             return $this->redirectToRoute('landingpage', array('error' => 'wrong_result'));

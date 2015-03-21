@@ -9,9 +9,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 
-use Acme\VkBundle\Lib\VkApi;
-
-
 class LandingController extends Controller
 {
     /**

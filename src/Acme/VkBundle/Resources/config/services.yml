@@ -1,8 +1,13 @@
 services:
-#    acme_vk.example:
-#        class: Acme\VkBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    acme_vk.api_lib:
+        class: Acme\VkBundle\Lib\VkApi
+
+ #   acme_vk.default_controller:
+ #       class: Acme\VkBundle\Controller\DefaultController
+ #       arguments: ["@acme_vk.api_lib"]
 
     acme_vk.command.vk1:
           class: Acme\VkBundle\Command\VkParsing1Command
-          arguments: ["@doctrine"]
+          arguments: ["@doctrine", "@acme_vk.api_lib"]
+          tags:
+              -  { name: console.command }

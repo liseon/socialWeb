@@ -46,9 +46,9 @@ function varlog() {
     foreach ($args as $arg) {
         $mess = is_object($arg) ? get_class($arg) : var_export($arg, true);
         if ('cli' === php_sapi_name()) {
-            echo "{$mess} \n";
+            echo $mess . "\n";
         } else {
-            echo "$mess <br>";
+            echo $mess . "<br>";
             error_log($mess, E_ERROR);
         }
     }

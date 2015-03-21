@@ -36,7 +36,7 @@ Acme\VkBundle\Entity\VkParsingTasks:
             nullable: false
             default: '0'
             column: is_done
-        vkUser:
+        vkUserId:
             type: integer
             nullable: false
             default: '0'
