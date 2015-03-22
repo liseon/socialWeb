@@ -2,12 +2,13 @@
 
 namespace Acme\VkBundle\Entity;
 
+use Acme\MainBundle\Entity\Announces;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * VkAttachments
  *
- * @ORM\Table(name="vk_attachments", indexes={@ORM\Index(name="SECONDARY", columns={"announce_id"}), @ORM\Index(name="moderator", columns={"moderator_id"}), @ORM\Index(name="fk_attachments_3_idx", columns={"vk_id"})})
+ * @ORM\Table(name="vk_attachments", indexes={@ORM\Index(name="SECONDARY", columns={"announce_id"}), @ORM\Index(name="moderator", columns={"moderator_id"})})
  * @ORM\Entity
  */
 class VkAttachments
@@ -26,7 +27,7 @@ class VkAttachments
      *
      * @ORM\Column(name="vk_owner", type="integer", nullable=false)
      */
-    private $vkOwner;
+    private $vkOwner = 0;
 
     /**
      * @var string
@@ -40,19 +41,32 @@ class VkAttachments
      *
      * @ORM\Column(name="url", type="string", length=255, nullable=false)
      */
-    private $url;
+    private $url = '';
+
+    /**
+     * @var string
+     *
+     */
+    private $src = '';
+
+
+    /**
+     * @var string
+     *
+     */
+    private $srcBig = '';
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="moderation", type="boolean", nullable=false)
      */
-    private $moderation;
+    private $moderation = false;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="moderation_updated", type="datetime", nullable=false)
+     * @ORM\Column(name="moderation_updated", type="datetime", nullable=true)
      */
     private $moderationUpdated;
 
@@ -71,7 +85,7 @@ class VkAttachments
     private $updatedAt;
 
     /**
-     * @var \Acme\MainBundle\Entity\Announces
+     * @var Announces
      *
      * @ORM\ManyToOne(targetEntity="\Acme\MainBundle\Entity\Announces")
      * @ORM\JoinColumns({
@@ -81,25 +95,11 @@ class VkAttachments
     private $announce;
 
     /**
-     * @var \Acme\MainBundle\Entity\Moderators
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="\Acme\MainBundle\Entity\Moderators")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="moderator_id", referencedColumnName="id")
      * })
      */
-    private $moderator;
-
-    /**
-     * @var \Acme\VkBundle\Entity\VkUsers
-     *
-     * @ORM\ManyToOne(targetEntity="Acme\VkBundle\Entity\VkUsers")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="vk_id", referencedColumnName="vk_id")
-     * })
-     */
-    private $vk;
-
+    private $moderator = 0;
 
 
     /**
@@ -120,10 +120,50 @@ class VkAttachments
      */
     public function setVkOwner($vkOwner)
     {
-        $this->vkOwner = $vkOwner;
+        $this->vkOwner = (int)$vkOwner;
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getSrc()
+    {
+        return $this->src;
+    }
+
+    /**
+     * @param string $src
+     * @return VkAttachments
+     */
+    public function setSrc($src)
+    {
+        $this->src = $src;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSrcBig()
+    {
+        return $this->srcBig;
+    }
+
+    /**
+     * @param string $srcBig
+     * @return VkAttachments
+     */
+    public function setSrcBig($srcBig)
+    {
+        $this->srcBig = $srcBig;
+
+        return $this;
+    }
+
+
 
     /**
      * Get vkOwner
@@ -276,10 +316,10 @@ class VkAttachments
     /**
      * Set announce
      *
-     * @param \Acme\MainBundle\Entity\Announces $announce
+     * @param Announces $announce
      * @return VkAttachments
      */
-    public function setAnnounce(\Acme\MainBundle\Entity\Announces $announce = null)
+    public function setAnnounce(Announces $announce)
     {
         $this->announce = $announce;
 
@@ -289,7 +329,7 @@ class VkAttachments
     /**
      * Get announce
      *
-     * @return \Acme\MainBundle\Entity\Announces
+     * @return Announces
      */
     public function getAnnounce()
     {
@@ -299,12 +339,12 @@ class VkAttachments
     /**
      * Set moderator
      *
-     * @param \Acme\MainBundle\Entity\Moderators $moderator
+     * @param int $moderator
      * @return VkAttachments
      */
-    public function setModerator(\Acme\MainBundle\Entity\Moderators $moderator = null)
+    public function setModerator($moderator)
     {
-        $this->moderator = $moderator;
+        $this->moderator = (int)$moderator;
 
         return $this;
     }
@@ -312,34 +352,11 @@ class VkAttachments
     /**
      * Get moderator
      *
-     * @return\Acme\MainBundle\Entity\Moderators
+     * @return int
      */
     public function getModerator()
     {
         return $this->moderator;
-    }
-
-    /**
-     * Set vk
-     *
-     * @param \Acme\VkBundle\Entity\VkUsers $vk
-     * @return VkAttachments
-     */
-    public function setVk(\Acme\VkBundle\Entity\VkUsers $vk = null)
-    {
-        $this->vk = $vk;
-
-        return $this;
-    }
-
-    /**
-     * Get vk
-     *
-     * @return \Acme\VkBundle\Entity\VkUsers 
-     */
-    public function getVk()
-    {
-        return $this->vk;
     }
 
     /**

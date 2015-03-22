@@ -34,6 +34,7 @@ class SecuredController extends Controller
 
     /**
      * @Route("/logout", name = "secured.logout")
+     * @NeedAuth()
      */
     public function logoutAction(Request $request) {
         $this->getAuth()->logout();

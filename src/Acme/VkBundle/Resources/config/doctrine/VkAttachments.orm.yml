@@ -8,9 +8,6 @@ Acme\VkBundle\Entity\VkAttachments:
         moderator:
             columns:
                 - moderator_id
-        vk_id:
-            columns:
-                - vk_id
     id:
         id:
             type: integer
@@ -30,18 +27,32 @@ Acme\VkBundle\Entity\VkAttachments:
             nullable: false
             length: null
             fixed: false
+        src:
+            type: string
+            nullable: false
+            length: 255
+            fixed: false
+            default: ''
+        srcBig:
+            type: string
+            nullable: false
+            length: 255
+            fixed: false
+            column: src_big
+            default: ''
         url:
             type: string
             nullable: false
             length: 255
             fixed: false
+            default: ''
         moderation:
             type: boolean
             nullable: false
             default: '0'
         moderationUpdated:
             type: datetime
-            nullable: false
+            nullable: true
             default: '0000-00-00 00:00:00'
             column: moderation_updated
         createdAt:
@@ -54,17 +65,20 @@ Acme\VkBundle\Entity\VkAttachments:
             nullable: false
             default: CURRENT_TIMESTAMP
             column: updated_at
-        announce:
-            type: integer
-            nullable: false
-            column: announce_id
         moderator:
             type: integer
             nullable: false
             column: moderator_id
-        vk:
-            type: integer
-            nullable: false
-            column: vk_id
+    manyToOne:
+        announce:
+            targetEntity: \Acme\MainBundle\Entity\Announces
+            cascade: ["persist"]
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                announce_id:
+                    nullable: false
+                    referencedColumnName: id
+            orphanRemoval: false
     lifecycleCallbacks:
         prePersist: [doStuffOnPrePersist]

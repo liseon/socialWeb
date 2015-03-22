@@ -2,6 +2,9 @@ services:
     acme_main.auth:
             class: Acme\MainBundle\Lib\Auth
             arguments: ["@doctrine", "@session"]
+    acme_main.collection_manager:
+            class: Acme\MainBundle\Lib\CollectionManager
+            arguments: ["@doctrine"]
 
     kernel.listener.controller:
         class: Acme\MainBundle\EventListener\AuthListener

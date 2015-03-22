@@ -21,10 +21,11 @@ class VkPostsSearcher extends SearcherAbstract
      * Перед поиском текст и ключи нормализуется!
      *
      * @param VkPostsCollection $collection
+     * @param int $userId
      * @return VkPostsCollection $result
      *
      */
-    public function find(VkPostsCollection $collection) {
+    public function find(VkPostsCollection $collection, $userId = 0) {
         $result = new VkPostsCollection();
         $collection->reset();
         $extremeTime = time() - $this->getPeriod();
@@ -38,8 +39,10 @@ class VkPostsSearcher extends SearcherAbstract
             $attachPoints = $this->calcPointsForAttachments($collection->getProperty('attachments'));
             $total = $points + $attachPoints;
             if ($total >= $this->level) {
-                varlog("attach: {$attachPoints}   Total: {$total}");
-                varlog("*************************************************");
+               // varlog("attach: {$attachPoints}   Total: {$total}");
+              //  varlog("*************************************************");
+                $collection->setProperty('for_user_id', (int)$userId);
+                $collection->setProperty('points', $total);
                 $result->add($collection->getCurrent());
             }
         } while ($collection->getNext());

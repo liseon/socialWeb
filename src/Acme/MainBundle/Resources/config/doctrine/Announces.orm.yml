@@ -11,6 +11,12 @@ Acme\MainBundle\Entity\Announces:
         owner:
             columns:
                 - owner_id
+        post_created:
+            columns:
+                - post_created_at
+        copy_post_created:
+            columns:
+                - copy_post_created_at
     id:
         id:
             type: integer
@@ -31,17 +37,12 @@ Acme\MainBundle\Entity\Announces:
             nullable: false
             unsigned: false
             column: owner_id
-        ownerUrl:
-            type: string
-            nullable: false
-            length: 255
-            fixed: false
-            column: owner_url
         ownerPhoto:
             type: string
             nullable: false
             length: 255
             fixed: false
+            default: ''
             column: owner_photo
         postId:
             type: integer
@@ -49,6 +50,25 @@ Acme\MainBundle\Entity\Announces:
             unsigned: false
             default: '0'
             column: post_id
+        copyOwnerId:
+            type: integer
+            nullable: false
+            unsigned: false
+            default: '0'
+            column: copy_owner_id
+        copyOwnerPhoto:
+            type: string
+            nullable: false
+            length: 255
+            fixed: false
+            default: ''
+            column: copy_owner_photo
+        copyPostId:
+            type: integer
+            nullable: false
+            unsigned: false
+            default: '0'
+            column: copy_post_id
         friendId:
             type: integer
             nullable: false
@@ -70,7 +90,7 @@ Acme\MainBundle\Entity\Announces:
             default: '0'
         moderationUpdated:
             type: datetime
-            nullable: false
+            nullable: true
             default: '0000-00-00 00:00:00'
             column: moderation_updated
         createdAt:
@@ -83,7 +103,7 @@ Acme\MainBundle\Entity\Announces:
             nullable: false
             default: CURRENT_TIMESTAMP
             column: updated_at
-        forUser:
+        forUserId:
             type: integer
             nullable: false
             column: for_user_id
@@ -91,5 +111,15 @@ Acme\MainBundle\Entity\Announces:
             type: integer
             nullable: false
             column: moderator_id
+        postCreatedAt:
+            type: datetime
+            nullable: false
+            default: '0000-00-00 00:00:00'
+            column: post_created_at
+        copyPostCreatedAt:
+            type: datetime
+            nullable: false
+            default: '0000-00-00 00:00:00'
+            column: copy_post_created_at
     lifecycleCallbacks:
         prePersist: [doStuffOnPrePersist]

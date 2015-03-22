@@ -42,4 +42,8 @@ class VkFriendsCollection extends CollectionAbstract implements FriendsCollectio
 
     public function getMutualFriendId(){
     }
+
+    public function prepareEntities() {
+        return $this;
+    }
 }

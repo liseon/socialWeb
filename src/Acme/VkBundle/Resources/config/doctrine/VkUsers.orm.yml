@@ -51,7 +51,7 @@ Acme\VkBundle\Entity\VkUsers:
             nullable: false
             default: CURRENT_TIMESTAMP
             column: updated_at
-    manyToOne:
+    oneToOne:
         user:
             targetEntity: \Acme\MainBundle\Entity\Users
             cascade: ["persist"]

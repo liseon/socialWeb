@@ -2,6 +2,7 @@
 
 namespace Acme\VkBundle\Command;
 
+use Acme\MainBundle\Lib\CollectionManager;
 use Acme\VkBundle\Lib\VkPostsSearcher;
 use AppBundle\Lib\LockHelper;
 use Symfony\Component\Console\Command\Command;
@@ -50,11 +51,15 @@ class VkParsing1Command extends Command
     /** @var  VkPostsSearcher */
     private $searcher;
 
-    public function __construct(Registry $doctrine, VkApi $vkApi) {
+    /** @var CollectionManager  */
+    private $collectionManager;
+
+    public function __construct(Registry $doctrine, VkApi $vkApi, CollectionManager $collectionManager) {
         $this->tasksRep = $doctrine->getRepository('AcmeVkBundle:VkParsingTasks');
         $this->vkUserRep = $doctrine->getRepository('AcmeVkBundle:VkUsers');
 
         $this->api = $vkApi;
+        $this->collectionManager = $collectionManager;
 
         parent::__construct();
     }
@@ -122,12 +127,23 @@ EOF
 
         //Первый круг друзей
         $result = new VkPostsCollection();
-        $this->fetchPostsForUsers($friends, $result, $postsCount);
+        $this->fetchPostsForUsers($friends, $result, $postsCount, $vk->getId());
 
-       //varlog($result->getRows());
+        $result->prepareEntities();
+
+        varlog($result->getEntities());
+
+        varlog(count($result->getEntities()));
+
+        $this->collectionManager->save($result);
     }
 
-    private function fetchPostsForUsers(VkFriendsCollection $friends, VkPostsCollection &$result, &$postsCount) {
+    private function fetchPostsForUsers(
+        VkFriendsCollection $friends,
+        VkPostsCollection &$result,
+        &$postsCount,
+        $userId
+    ) {
         $block = [];
         do {
             $block[] = $friends->getId();
@@ -135,7 +151,7 @@ EOF
                 $posts = $this->api->executeWallGet($block, 30);
                 $postsCount += $posts->count();
 
-                $result->joinCollection($this->searcher->find($posts));
+                $result->joinCollection($this->searcher->find($posts, $userId));
                 $block = [];
             }
         } while ($friends->getNext());

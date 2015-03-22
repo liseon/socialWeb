@@ -8,6 +8,6 @@ services:
 
     acme_vk.command.vk1:
           class: Acme\VkBundle\Command\VkParsing1Command
-          arguments: ["@doctrine", "@acme_vk.api_lib"]
+          arguments: ["@doctrine", "@acme_vk.api_lib", "@acme_main.collection_manager"]
           tags:
               -  { name: console.command }

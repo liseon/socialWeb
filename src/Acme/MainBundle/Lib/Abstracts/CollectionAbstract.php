@@ -15,6 +15,9 @@ abstract class CollectionAbstract
     /** @var array */
     protected $rows = [];
 
+    /** @var array  */
+    protected $entities =[];
+
     private $i = 0;
 
     /**
@@ -74,6 +77,16 @@ abstract class CollectionAbstract
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getEntities()
+    {
+        return $this->entities;
+    }
+
+
+
     public function reset() {
         return $this->setIndex(0);
     }
@@ -92,5 +105,15 @@ abstract class CollectionAbstract
     public function getProperty($name) {
         return isset($this->getCurrent()[$name]) ? $this->getCurrent()[$name] : false;
     }
+
+    public function setProperty($name, $value) {
+        $this->rows[$this->i][$name] = $value;
+    }
+
+    /**
+     * Подготовить данные к сохранению. Вернуть массив из объектов нужного типа
+     * @return CollectionAbstract
+     */
+    abstract function prepareEntities();
 
 }

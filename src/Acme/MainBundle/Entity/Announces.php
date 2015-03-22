@@ -35,19 +35,13 @@ class Announces
      */
     private $ownerId;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="owner_url", type="string", nullable=false)
-     */
-    private $ownerUrl;
 
     /**
      * @var string
      *
      * @ORM\Column(name="owner_photo", type="string", nullable=false)
      */
-    private $ownerPhoto;
+    private $ownerPhoto = '';
 
     /**
      * @var integer
@@ -59,9 +53,31 @@ class Announces
     /**
      * @var integer
      *
+     * @ORM\Column(name="copy_owner_id", type="integer", nullable=false)
+     */
+    private $copyOwnerId = 0;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="copy_owner_photo", type="string", nullable=false)
+     */
+    private $copyOwnerPhoto = '';
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="copy_post_id", type="integer", nullable=false)
+     */
+    private $copyPostId = '';
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="friend_id", type="integer", nullable=false)
      */
-    private $friendId;
+    private $friendId = 0;
 
     /**
      * @var string
@@ -82,12 +98,12 @@ class Announces
      *
      * @ORM\Column(name="moderation", type="boolean", nullable=false)
      */
-    private $moderation;
+    private $moderation = false;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="moderation_updated", type="datetime", nullable=false)
+     * @ORM\Column(name="moderation_updated", type="datetime", nullable=true)
      */
     private $moderationUpdated;
 
@@ -101,29 +117,35 @@ class Announces
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="post_created_at", type="datetime", nullable=false)
+     */
+    private $postCreatedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="copy_post_created_at", type="datetime", nullable=false)
+     */
+    private $copyPostCreatedAt;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="updated_at", type="datetime", nullable=false)
      */
     private $updatedAt;
 
     /**
-     * @var \Acme\MainBundle\Entity\Users
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Acme\MainBundle\Entity\Users")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="for_user_id", referencedColumnName="id")
-     * })
      */
-    private $forUser;
+    private $forUserId;
 
     /**
-     * @var \Acme\MainBundle\Entity\Moderators
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Acme\MainBundle\Entity\Moderators")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="moderator_id", referencedColumnName="id")
-     * })
      */
-    private $moderator;
+    private $moderator = 0;
 
 
 
@@ -137,24 +159,6 @@ class Announces
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getOwnerUrl()
-    {
-        return $this->ownerUrl;
-    }
-
-    /**
-     * @param string $ownerUrl
-     * @return Announces
-     */
-    public function setOwnerUrl($ownerUrl)
-    {
-        $this->ownerUrl = $ownerUrl;
-
-        return $this;
-    }
 
 
     /**
@@ -175,6 +179,104 @@ class Announces
 
         return $this;
     }
+
+    /**
+     * @return int
+     */
+    public function getCopyOwnerId()
+    {
+        return $this->copyOwnerId;
+    }
+
+    /**
+     * @param int $copyOwnerId
+     * @return Announces
+     */
+    public function setCopyOwnerId($copyOwnerId)
+    {
+        $this->copyOwnerId = (int)$copyOwnerId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCopyOwnerPhoto()
+    {
+        return $this->copyOwnerPhoto;
+    }
+
+    /**
+     * @param string $copyOwnerPhoto
+     * @return Announces
+     */
+    public function setCopyOwnerPhoto($copyOwnerPhoto)
+    {
+        $this->copyOwnerPhoto = $copyOwnerPhoto;
+
+        return $this;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getCopyPostId()
+    {
+        return $this->copyPostId;
+    }
+
+    /**
+     * @param int $copyPostId
+     * @return Announces
+     */
+    public function setCopyPostId($copyPostId)
+    {
+        $this->copyPostId = (int)$copyPostId;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCopyPostCreatedAt()
+    {
+        return $this->copyPostCreatedAt;
+    }
+
+    /**
+     * @param \DateTime $copyPostCreatedAt
+     * @return Announces
+     */
+    public function setCopyPostCreatedAt($copyPostCreatedAt)
+    {
+        $this->copyPostCreatedAt = $copyPostCreatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getPostCreatedAt()
+    {
+        return $this->postCreatedAt;
+    }
+
+    /**
+     * @param \DateTime $postCreatedAt
+     * @return Announces
+     */
+    public function setPostCreatedAt($postCreatedAt)
+    {
+        $this->postCreatedAt = $postCreatedAt;
+
+        return $this;
+    }
+
+
 
 
     /**
@@ -208,7 +310,7 @@ class Announces
      */
     public function setOwnerId($ownerId)
     {
-        $this->ownerId = $ownerId;
+        $this->ownerId = (int)$ownerId;
 
         return $this;
     }
@@ -231,7 +333,7 @@ class Announces
      */
     public function setPostId($postId)
     {
-        $this->postId = $postId;
+        $this->postId = (int)$postId;
 
         return $this;
     }
@@ -254,7 +356,7 @@ class Announces
      */
     public function setFriendId($friendId)
     {
-        $this->friendId = $friendId;
+        $this->friendId = (int)$friendId;
 
         return $this;
     }
@@ -300,7 +402,7 @@ class Announces
      */
     public function setPoints($points)
     {
-        $this->points = $points;
+        $this->points = (int)$points;
 
         return $this;
     }
@@ -324,6 +426,7 @@ class Announces
     public function setModeration($moderation)
     {
         $this->moderation = $moderation;
+        $this->setModerationUpdated(new \DateTime());
 
         return $this;
     }
@@ -344,7 +447,7 @@ class Announces
      * @param \DateTime $moderationUpdated
      * @return Announces
      */
-    public function setModerationUpdated($moderationUpdated)
+    public function setModerationUpdated(\DateTime $moderationUpdated)
     {
         $this->moderationUpdated = $moderationUpdated;
 
@@ -408,35 +511,35 @@ class Announces
     }
 
     /**
-     * Set forUser
+     * Set forUserId
      *
-     * @param \Acme\MainBundle\Entity\Users $forUser
+     * @param int $forUserId
      * @return Announces
      */
-    public function setForUser(\Acme\MainBundle\Entity\Users $forUser = null)
+    public function setForUserId($forUserId = 0)
     {
-        $this->forUser = $forUser;
+        $this->forUserId = (int)$forUserId;
 
         return $this;
     }
 
     /**
-     * Get forUser
+     * Get forUserId
      *
-     * @return \Acme\MainBundle\Entity\Users 
+     * @return int
      */
-    public function getForUser()
+    public function getForUserId()
     {
-        return $this->forUser;
+        return $this->forUserId;
     }
 
     /**
      * Set moderator
      *
-     * @param \Acme\MainBundle\Entity\Moderators $moderator
+     * @param int $moderator
      * @return Announces
      */
-    public function setModerator(\Acme\MainBundle\Entity\Moderators $moderator = null)
+    public function setModerator(int $moderator = null)
     {
         $this->moderator = $moderator;
 
@@ -446,7 +549,7 @@ class Announces
     /**
      * Get moderator
      *
-     * @return \Acme\MainBundle\Entity\Moderators 
+     * @return int
      */
     public function getModerator()
     {

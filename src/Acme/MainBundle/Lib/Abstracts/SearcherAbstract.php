@@ -166,7 +166,7 @@ abstract class SearcherAbstract
             }
         }
 
-        if ($result >= $this->level) {
+        /*if ($result >= $this->level) {
             varlog($utext);
             varlog("KEYS:");
             foreach ($match as $m) {
@@ -174,7 +174,7 @@ abstract class SearcherAbstract
             }
 
             varlog("  ----------- {$result}  ------------");
-        }
+        }*/
 
         return $result;
     }
