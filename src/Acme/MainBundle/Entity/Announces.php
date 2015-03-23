@@ -2,7 +2,9 @@
 
 namespace Acme\MainBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use \Acme\VkBundle\Entity\VkAttachments;
 
 /**
  * Announces
@@ -146,6 +148,33 @@ class Announces
      *
      */
     private $moderator = 0;
+
+    /**
+     * @ORM\OneToMany(targetEntity="VkAttachments", mappedBy="announces")
+     */
+    protected $attachments;
+
+    public function __construct() {
+        $this->attachments = new ArrayCollection();
+    }
+
+
+        /**
+     * @return array
+     */
+    public function getAttachments() {
+        return $this->attachments;
+    }
+
+    /**
+     * @param mixed $attachments
+     * @return Announces
+     */
+    public function setAttachments($attachments) {
+        $this->attachments = $attachments;
+
+        return $this;
+    }
 
 
 

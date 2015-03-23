@@ -72,13 +72,9 @@ Acme\VkBundle\Entity\VkAttachments:
     manyToOne:
         announce:
             targetEntity: \Acme\MainBundle\Entity\Announces
-            cascade: ["persist"]
-            mappedBy: null
-            inversedBy: null
-            joinColumns:
-                announce_id:
-                    nullable: false
-                    referencedColumnName: id
-            orphanRemoval: false
+            inversedBy: attachments
+            joinColumn:
+                name: announce_id
+                referencedColumnName: id
     lifecycleCallbacks:
         prePersist: [doStuffOnPrePersist]

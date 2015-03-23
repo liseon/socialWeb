@@ -88,9 +88,7 @@ class VkAttachments
      * @var Announces
      *
      * @ORM\ManyToOne(targetEntity="\Acme\MainBundle\Entity\Announces")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="announce_id", referencedColumnName="id")
-     * })
+     * @ORM\JoinColumn(name="announce_id", referencedColumnName="id")
      */
     private $announce;
 

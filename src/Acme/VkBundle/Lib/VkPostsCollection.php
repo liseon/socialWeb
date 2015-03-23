@@ -59,10 +59,8 @@ class VkPostsCollection extends CollectionAbstract implements PostsCollectionInt
             $row = $this->getCurrent();
 
             if (!isset($row['attachments'])) {
-                varlog("without attach!");
                 continue;
             }
-            varlog("attach!");
 
             foreach ($row['attachments'] as $attach) {
                 $type = isset($attach['type']) ? $attach['type'] : false;

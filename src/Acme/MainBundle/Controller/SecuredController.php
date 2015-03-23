@@ -6,6 +6,7 @@ use Acme\MainBundle\AcmeMainBundle;
 use Acme\MainBundle\Entity\Subscriptions;
 use Acme\MainBundle\Lib\Auth;
 use Acme\VkBundle\Entity\VkParsingTasks;
+use Acme\VkBundle\Entity\VkAttachments;
 use Acme\MainBundle\Annotation\NeedAuth;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -13,6 +14,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use \Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @Route("/secured")
@@ -27,8 +30,34 @@ class SecuredController extends Controller
      * @Template()
      */
     public function indexAction(Request $request) {
+        $auth = $this->getAuth();
+        /** @var ObjectRepository $repository */
+        $repository = $this->getDoctrine()
+            ->getRepository('AcmeMainBundle:Announces');
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $builder */
+        $builder = $repository->createQueryBuilder('a');
+        $query = $builder
+            ->where('a.forUserId = :for_user_id')
+            ->andWhere('a.sourceType = :type')
+            ->setParameter('for_user_id', $auth = $this->getAuth()->getId())
+            ->setParameter('type', 'vk')
+            ->orderBy('a.postCreatedAt', 'DESC')
+            ->setMaxResults(100)
+            ->getQuery();
+        $announces = $query->getResult();
 
-        return [];
+        foreach ($announces as $post) {
+            varlog($post->getText());
+            foreach ($post->getAttachments() as $attach) {
+                /** @var VkAttachments $attach */
+                if ($attach->getType() == 'photo') {
+                    varlog("<img src='" . $attach->getSrc() . "'>");
+                }
+            }
+            varlog("**************************************");
+        }
+
+        return ['announces' => $announces];
         return $this->render('secure/index.html.twig');
     }
 

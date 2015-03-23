@@ -102,12 +102,6 @@ EOF
             }
         }
 
-        //$carBrands = ConfigHelper::get('data/carBrands');
-        //varlog($carBrands);
-        //$br = $this->models();
-       /* $carModels = ConfigHelper::get('data/carModels');
-        varlog($carModels);*/
-
         LockHelper::stop();
     }
 
@@ -129,13 +123,7 @@ EOF
         $result = new VkPostsCollection();
         $this->fetchPostsForUsers($friends, $result, $postsCount, $vk->getId());
 
-        $result->prepareEntities();
-
-        varlog($result->getEntities());
-
-        varlog(count($result->getEntities()));
-
-        $this->collectionManager->save($result);
+        $this->collectionManager->save($result->prepareEntities());
     }
 
     private function fetchPostsForUsers(

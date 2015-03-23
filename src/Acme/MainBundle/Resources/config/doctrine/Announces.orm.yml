@@ -121,5 +121,12 @@ Acme\MainBundle\Entity\Announces:
             nullable: false
             default: '0000-00-00 00:00:00'
             column: copy_post_created_at
+    oneToMany:
+        attachments:
+            targetEntity: \Acme\VkBundle\Entity\VkAttachments
+            mappedBy: announces
+            joinColumn:
+                name: id
+                referencedColumnName: announce_id
     lifecycleCallbacks:
         prePersist: [doStuffOnPrePersist]
