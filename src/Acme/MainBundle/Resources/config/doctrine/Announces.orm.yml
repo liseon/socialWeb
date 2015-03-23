@@ -1,5 +1,6 @@
 Acme\MainBundle\Entity\Announces:
     type: entity
+    repositoryClass: Acme\MainBundle\Entity\AnnouncesRepository
     table: Announces
     indexes:
         for_user_id:
@@ -124,7 +125,7 @@ Acme\MainBundle\Entity\Announces:
     oneToMany:
         attachments:
             targetEntity: \Acme\VkBundle\Entity\VkAttachments
-            mappedBy: announces
+            mappedBy: announce
             joinColumn:
                 name: id
                 referencedColumnName: announce_id

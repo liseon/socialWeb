@@ -14,7 +14,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use \Doctrine\Common\Persistence\ObjectRepository;
+use Acme\MainBundle\Entity\AnnouncesRepository;
+use Acme\MainBundle\Entity\Announces;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
@@ -31,34 +32,27 @@ class SecuredController extends Controller
      */
     public function indexAction(Request $request) {
         $auth = $this->getAuth();
-        /** @var ObjectRepository $repository */
+        /** @var AnnouncesRepository $repository */
         $repository = $this->getDoctrine()
             ->getRepository('AcmeMainBundle:Announces');
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $builder */
-        $builder = $repository->createQueryBuilder('a');
-        $query = $builder
-            ->where('a.forUserId = :for_user_id')
-            ->andWhere('a.sourceType = :type')
-            ->setParameter('for_user_id', $auth = $this->getAuth()->getId())
-            ->setParameter('type', 'vk')
-            ->orderBy('a.postCreatedAt', 'DESC')
-            ->setMaxResults(100)
-            ->getQuery();
-        $announces = $query->getResult();
+        $announces = $repository->findForUserOrderByCreated($auth->getId(), 100, 0);
 
+        $result = [];
         foreach ($announces as $post) {
-            varlog($post->getText());
-            foreach ($post->getAttachments() as $attach) {
-                /** @var VkAttachments $attach */
-                if ($attach->getType() == 'photo') {
-                    varlog("<img src='" . $attach->getSrc() . "'>");
-                }
+            /** @var Announces $post */
+            if ($post instanceof Announces) {
+                $result[$post->getId()] = [
+                    'post' => $post,
+                    'attach' => [],
+                ];
+            } elseif ($post instanceof VkAttachments) {
+                /** @var VkAttachments $post */
+                $result[$post->getAnnounce()->getId()]['attach'][] = $post;
             }
-            varlog("**************************************");
+
         }
 
-        return ['announces' => $announces];
-        return $this->render('secure/index.html.twig');
+        return ['announces' => $result];
     }
 
     /**

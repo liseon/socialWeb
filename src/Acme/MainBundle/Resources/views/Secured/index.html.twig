@@ -2,5 +2,22 @@
 
 
 {% block body %}
-    Announces List - test!
+    {% for post in announces %}
+        {{ post.post.getText }} <br>
+        {% for attach in post.attach %}
+            {% if attach.getType == 'photo' %}
+                <img src="{{ attach.getSrc }}" /> <br>
+            {% endif %}
+            {% if attach.getType == 'link' %}
+                <a href="{{ attach.url }}" >
+                    {% if attach.getSrc %}
+                        <img src="{{ attach.getSrc }}" />
+                    {% else %}
+                        {{ attach.url }}
+                    {% endif %}
+                </a> <br>
+            {% endif %}
+        {% endfor %}
+        <br>=========================================================<br>
+    {% endfor %}
 {% endblock %}

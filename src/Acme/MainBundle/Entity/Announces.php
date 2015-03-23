@@ -568,9 +568,9 @@ class Announces
      * @param int $moderator
      * @return Announces
      */
-    public function setModerator(int $moderator = null)
+    public function setModerator($moderator)
     {
-        $this->moderator = $moderator;
+        $this->moderator = (int)$moderator;
 
         return $this;
     }

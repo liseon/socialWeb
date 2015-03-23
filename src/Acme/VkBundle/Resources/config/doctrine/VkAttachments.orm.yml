@@ -2,7 +2,7 @@ Acme\VkBundle\Entity\VkAttachments:
     type: entity
     table: vk_attachments
     indexes:
-        announce_id:
+        announce:
             columns:
                 - announce_id
         moderator:
