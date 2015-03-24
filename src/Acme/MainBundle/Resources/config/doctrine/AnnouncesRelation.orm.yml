@@ -1,0 +1,52 @@
+Acme\MainBundle\Entity\AnnouncesRelation:
+    type: entity
+    table: AnnouncesRelation
+    indexes:
+        userId:
+            columns:
+                - user_id
+        friendId:
+            columns:
+                - friend_id
+        announce:
+            columns:
+                - announce_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        userId:
+            type: integer
+            nullable: false
+            column: user_id
+        friendId:
+            type: integer
+            nullable: false
+            column: friend_id
+        copyOwnerId:
+            type: integer
+            nullable: false
+            column: copy_owner_id
+        copyPostId:
+            type: integer
+            nullable: false
+            column: copy_post_id
+        copyPostCreatedAt:
+            type: datetime
+            nullable: false
+            default: '0000-00-00 00:00:00'
+            column: copy_post_created_at
+    oneToOne:
+        announce:
+            targetEntity: \Acme\MainBundle\Entity\Announces
+            joinColumns:
+                announce_id:
+                    nullable: false
+                    referencedColumnName: id
+    lifecycleCallbacks:
+        prePersist: [doStuffOnPrePersist]

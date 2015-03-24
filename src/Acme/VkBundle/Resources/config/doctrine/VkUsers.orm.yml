@@ -55,12 +55,9 @@ Acme\VkBundle\Entity\VkUsers:
         user:
             targetEntity: \Acme\MainBundle\Entity\Users
             cascade: ["persist"]
-            mappedBy: null
-            inversedBy: null
             joinColumns:
                 user_id:
                     nullable: false
                     referencedColumnName: id
-            orphanRemoval: false
     lifecycleCallbacks:
         prePersist: [doStuffOnPrePersist]

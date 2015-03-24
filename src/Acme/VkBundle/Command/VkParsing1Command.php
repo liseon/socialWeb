@@ -31,11 +31,11 @@ use Acme\VkBundle\Entity\VkUsers;
 class VkParsing1Command extends Command
 {
 
-    const CAR_BREND_POINTS = 50;
+    const CAR_BREND_POINTS = 50000;
 
-    const CAR_MODEL_POINTS = 10;
+    const CAR_MODEL_POINTS = 10000;
 
-    const MIN_LEVEL = 205;
+    const MIN_LEVEL = 205000;
 
     const PERIOD = 40;
 

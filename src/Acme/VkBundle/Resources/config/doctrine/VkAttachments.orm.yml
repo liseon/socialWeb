@@ -8,6 +8,12 @@ Acme\VkBundle\Entity\VkAttachments:
         moderator:
             columns:
                 - moderator_id
+        uniqueConstraints:
+            attach:
+                columns:
+                    - vk_owner
+                    - pid
+                    - type
     id:
         id:
             type: integer
@@ -22,6 +28,10 @@ Acme\VkBundle\Entity\VkAttachments:
             nullable: false
             unsigned: false
             column: vk_owner
+        pid:
+            type: integer
+            nullable: true
+            column: pid
         type:
             type: string
             nullable: false
