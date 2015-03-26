@@ -15,10 +15,9 @@ Acme\MainBundle\Entity\AnnouncesRelation:
         id:
             type: integer
             nullable: false
-            unsigned: false
             id: true
             generator:
-                strategy: IDENTITY
+                strategy: AUTO
     fields:
         userId:
             type: integer

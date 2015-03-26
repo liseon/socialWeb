@@ -159,4 +159,50 @@ class VkFriends
             $this->setCreatedAt(new \DateTime());
         }
     }
+
+    /**
+     * Set vkUser
+     *
+     * @param integer $vkUser
+     * @return VkFriends
+     */
+    public function setVkUser($vkUser)
+    {
+        $this->vkUser = $vkUser;
+
+        return $this;
+    }
+
+    /**
+     * Get vkUser
+     *
+     * @return integer 
+     */
+    public function getVkUser()
+    {
+        return $this->vkUser;
+    }
+
+    /**
+     * Set vkFriend
+     *
+     * @param integer $vkFriend
+     * @return VkFriends
+     */
+    public function setVkFriend($vkFriend)
+    {
+        $this->vkFriend = $vkFriend;
+
+        return $this;
+    }
+
+    /**
+     * Get vkFriend
+     *
+     * @return integer 
+     */
+    public function getVkFriend()
+    {
+        return $this->vkFriend;
+    }
 }

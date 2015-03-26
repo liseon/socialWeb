@@ -8,12 +8,12 @@ Acme\VkBundle\Entity\VkAttachments:
         moderator:
             columns:
                 - moderator_id
-        uniqueConstraints:
-            attach:
-                columns:
-                    - vk_owner
-                    - pid
-                    - type
+    uniqueConstraints:
+        attach:
+            columns:
+                - vk_owner
+                - pid
+                - type
     id:
         id:
             type: integer

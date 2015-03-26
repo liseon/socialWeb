@@ -111,7 +111,7 @@ class VkUsers
     /**
      * Get vkId
      *
-     * @return integer 
+     * @return integer
      */
     public function getVkId()
     {
@@ -134,7 +134,7 @@ class VkUsers
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -157,7 +157,7 @@ class VkUsers
     /**
      * Get token
      *
-     * @return string 
+     * @return string
      */
     public function getToken()
     {
@@ -180,7 +180,7 @@ class VkUsers
     /**
      * Get tokenExpiresAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTokenExpiresAt()
     {
@@ -203,7 +203,7 @@ class VkUsers
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -226,7 +226,7 @@ class VkUsers
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {

@@ -367,4 +367,32 @@ class VkAttachments
             $this->setCreatedAt(new \DateTime());
         }
     }
+    /**
+     * @var integer
+     */
+    private $pid;
+
+
+    /**
+     * Set pid
+     *
+     * @param integer $pid
+     * @return VkAttachments
+     */
+    public function setPid($pid)
+    {
+        $this->pid = $pid;
+
+        return $this;
+    }
+
+    /**
+     * Get pid
+     *
+     * @return integer 
+     */
+    public function getPid()
+    {
+        return $this->pid;
+    }
 }

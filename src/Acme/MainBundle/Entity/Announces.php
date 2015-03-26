@@ -159,7 +159,7 @@ class Announces
     }
 
 
-        /**
+    /**
      * @return array
      */
     public function getAttachments() {
@@ -181,7 +181,7 @@ class Announces
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -324,7 +324,7 @@ class Announces
     /**
      * Get sourceType
      *
-     * @return string 
+     * @return string
      */
     public function getSourceType()
     {
@@ -347,7 +347,7 @@ class Announces
     /**
      * Get ownerId
      *
-     * @return integer 
+     * @return integer
      */
     public function getOwnerId()
     {
@@ -370,7 +370,7 @@ class Announces
     /**
      * Get postId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostId()
     {
@@ -393,7 +393,7 @@ class Announces
     /**
      * Get friendId
      *
-     * @return integer 
+     * @return integer
      */
     public function getFriendId()
     {
@@ -416,7 +416,7 @@ class Announces
     /**
      * Get text
      *
-     * @return string 
+     * @return string
      */
     public function getText()
     {
@@ -439,7 +439,7 @@ class Announces
     /**
      * Get points
      *
-     * @return integer 
+     * @return integer
      */
     public function getPoints()
     {
@@ -463,7 +463,7 @@ class Announces
     /**
      * Get moderation
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getModeration()
     {
@@ -486,7 +486,7 @@ class Announces
     /**
      * Get moderationUpdated
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getModerationUpdated()
     {
@@ -509,7 +509,7 @@ class Announces
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -532,7 +532,7 @@ class Announces
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -594,5 +594,28 @@ class Announces
         if (is_null($this->getCreatedAt())) {
             $this->setCreatedAt(new \DateTime());
         }
+    }
+
+    /**
+     * Add attachments
+     *
+     * @param \Acme\VkBundle\Entity\VkAttachments $attachments
+     * @return Announces
+     */
+    public function addAttachment(\Acme\VkBundle\Entity\VkAttachments $attachments)
+    {
+        $this->attachments[] = $attachments;
+
+        return $this;
+    }
+
+    /**
+     * Remove attachments
+     *
+     * @param \Acme\VkBundle\Entity\VkAttachments $attachments
+     */
+    public function removeAttachment(\Acme\VkBundle\Entity\VkAttachments $attachments)
+    {
+        $this->attachments->removeElement($attachments);
     }
 }

@@ -9,38 +9,35 @@ Acme\MainBundle\Entity\Announces:
         owner:
             columns:
                 - owner_id
-        post_created:
+        postCreated:
             columns:
                 - post_created_at
-        uniqueConstraints:
-            post:
-                columns:
-                    - owner_id
-                    - post_id
+    uniqueConstraints:
+        post:
+            columns:
+                - owner_id
+                - post_id
     id:
         id:
             type: integer
             nullable: false
-            unsigned: false
             id: true
             generator:
-                strategy: IDENTITY
+                strategy: AUTO
     fields:
         sourceType:
             type: string
             nullable: false
-            length: null
+            length: 10
             fixed: false
             column: source_type
         ownerId:
             type: integer
             nullable: false
-            unsigned: false
             column: owner_id
         postId:
             type: integer
             nullable: false
-            unsigned: false
             default: '0'
             column: post_id
         text:
@@ -51,7 +48,6 @@ Acme\MainBundle\Entity\Announces:
         points:
             type: integer
             nullable: false
-            unsigned: false
             default: '0'
         moderation:
             type: boolean
